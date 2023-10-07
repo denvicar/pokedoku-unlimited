@@ -1,29 +1,48 @@
 import {special, types, SCHEMA_SIZE, regions} from "@/app/lib/constants";
 
-
-const buildSchema = (pokemons) => {
-    // scelgo tre tipi a caso per le righe
-    // per le prime due colonne filtro i tipi per quelli possibili
-    // poi ne prendo uno a caso
+const generateRows = (availableTypes) => {
     let rows = new Set()
-    let availableTypes = new Set(types)
-    console.log('Start, available types', availableTypes)
     for(let i = 0; i<SCHEMA_SIZE; i++) {
         let type = getRandomElement([...availableTypes])
-        rows.add(type)
-        availableTypes.delete(type)
+        if (type) {
+            rows.add(type)
+            availableTypes.delete(type)
+        }
     }
-    console.log("rows are",rows)
+    return rows
+}
 
+function generateColumns(pokemons) {
+    let rows = new Set()
     let columns = new Set()
-    let pokemonTypes = simplifyPokemons(pokemons,rows)
 
-    for (let i = 0; i<SCHEMA_SIZE-1; i++) {
-        availableTypes = getAvailableTypesByRows([...rows], pokemonTypes, availableTypes)
-        let type = getRandomElement([...availableTypes])
-        columns.add(type)
-        availableTypes.delete(type)
+    while (columns.size !== 2) {
+        columns = new Set()
+        let availableTypes = new Set(types)
+        rows = generateRows(availableTypes)
+        console.log('Rows generated: ',rows)
+        let pokemonTypes = simplifyPokemons(pokemons,rows)
+        for (let i = 0; i<SCHEMA_SIZE-1; i++) {
+            availableTypes = getAvailableTypesByRows([...rows], pokemonTypes, availableTypes)
+            console.log("Available Types for columns: ",availableTypes)
+            let type = getRandomElement([...availableTypes])
+            if (type) {
+                columns.add(type)
+                availableTypes.delete(type)
+            }
+        }
     }
+
+    return [rows,columns]
+
+}
+
+const buildSchema = (pokemons) => {
+    let partialSchema = generateColumns(pokemons)
+    let rows = partialSchema[0]
+    let columns = partialSchema[1]
+    console.log('Rows ',rows,' Columns ', columns)
+
 
     // filtro per regione, non posso fare mitici e leggendari per ora
     // devo filtrare le regioni per trovare quelle che hanno tutte le righe

@@ -2,34 +2,19 @@ import Image from 'next/image'
 import { getDatabase, ref, get, child } from 'firebase/database'
 import app from './lib/db'
 import {buildSchema} from "@/app/lib/gameSchema";
+import Schema from "@/app/components/schema";
+import './home.css'
 
 
 export default async function Home() {
-  const pokemons = new Map(Object.entries(await getData()))
-  let schema = buildSchema(pokemons)
+  const pokemons = await getData()
+  let schema = buildSchema(pokemons);
 
   return (
-    <main>
+    <main className="container-fluid">
       <p>The schema is currently: </p>
 
-        <table>
-            <thead>
-            <tr>
-                <th></th>
-                {schema[1].map(t=><th key={t}>{t}</th>)}
-            </tr>
-            </thead>
-            <tbody>
-            {schema[0].map(type => {
-                return <tr key={type}>
-                    <td>{type}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            })}
-            </tbody>
-        </table>
+        <Schema schema={schema} pokemons={pokemons} />
     </main>
   )
 }
@@ -38,5 +23,6 @@ async function getData() {
 
   const dbRef = ref(getDatabase(app),"data")
   const data = await get(child(dbRef,"pokemons"))
-  return data.val();
+  let pokemons = Array.from(new Map(Object.entries(data.val())).values())
+  return pokemons.map(p => p.sprite_url === '' ? {...p, sprite_url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'} : p)
 }
