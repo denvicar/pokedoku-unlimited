@@ -28,6 +28,9 @@ export default function Schema({pokemons, schema}) {
         if (regions.includes(types[1])) {
             if (p.region === types[1] && (p.types[0]===types[0] || p.types[1]===types[0])) {
                 setPicked(picked.map((row, i) => i !== lastIndexes[0] ? row : row.map((col, j) => j !== lastIndexes[1] ? col : p)))
+            } else {
+                setGuessColor("red")
+                setGuess("Wrong guess!")
             }
         }else if (p.types.length > 1) {
             if ((p.types[0] === types[0] || p.types[1] === types[0]) && (p.types[0] === types[1] || p.types[1] === types[1])) {
