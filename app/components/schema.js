@@ -1,5 +1,5 @@
 'use client'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 import ModalPicker from "@/app/components/modal";
 import Search from "@/app/components/search";
@@ -8,21 +8,36 @@ import {regions} from "@/app/lib/constants";
 import {buildSchema} from "@/app/lib/gameSchema";
 import PokemonList from "@/app/components/pokemonList";
 
-export default function Schema({pokemons,firstSchema}) {
+export default function Schema({pokemons}) {
     let [show, setShow] = useState(false)
     let [picked, setPicked] = useState([[null, null, null], [null, null, null], [null, null, null]])
     let [types, setTypes] = useState([])
     let [lastIndexes, setLastIndexes] = useState([])
     let [guess,setGuess] = useState('')
     let [guessColor, setGuessColor] = useState('')
-    let [schema,setSchema] = useState(firstSchema)
+    let [schema,setSchema] = useState()
     let [solutionTypes,setSolutionTypes] = useState([])
     let [surrender,setSurrender] = useState(false)
+    let [win,setWin] = useState(false)
+
+    useEffect(() => {
+        let ignore = false;
+        if (!ignore) {
+            if (localStorage.getItem("schema")) {
+                setSchema(JSON.parse(localStorage.getItem("schema")))
+            } else {
+                let s = buildSchema(pokemons)
+                setSchema(s)
+                localStorage.setItem("schema", JSON.stringify(s))
+            }
+        }
+        return ()=>{ignore=true}
+    }, [pokemons]);
 
     function handleTableClick(rowIndex, colIndex) {
         setGuessColor('')
         setGuess('')
-        if(!surrender) {
+        if(!surrender || !win) {
             setTypes([schema[0][rowIndex], schema[1][colIndex]])
             setLastIndexes([rowIndex, colIndex])
             console.log("Picked cell with types ", types)
@@ -57,13 +72,16 @@ export default function Schema({pokemons,firstSchema}) {
             setGuessColor("red")
             setGuess("Wrong guess!")
         }
+
+        if (picked.every(row=> row.every(item=>item))) setWin(true)
+
     }
 
     function getCellContent(row, col) {
         if (picked[row][col] === null) {
             return <button onClick={(e) => handleTableClick(row, col)}>{surrender ? 'Show list':'Pick guess'}</button>
         } else {
-            if(!surrender) {
+            if(!surrender || !win) {
                 return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={100} height={100}/>
             } else {
                 return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={100} height={100} onClick={()=>handleTableClick(row,col)}/>
@@ -73,6 +91,7 @@ export default function Schema({pokemons,firstSchema}) {
 
     function handleSurrender() {
         if (!surrender) {
+            setWin(false)
             setSurrender(true)
             setGuess('')
             setGuessColor('')
@@ -83,6 +102,7 @@ export default function Schema({pokemons,firstSchema}) {
     }
 
     function handleRegenerate() {
+        setWin(false)
         setPicked([[null, null, null], [null, null, null], [null, null, null]])
         setShow(false)
         setGuess('')
@@ -91,13 +111,15 @@ export default function Schema({pokemons,firstSchema}) {
         setLastIndexes([])
         setSolutionTypes([])
         setSurrender(false)
-        setSchema(buildSchema(pokemons))
+        let s = buildSchema(pokemons)
+        setSchema(s)
+        localStorage.setItem("schema",JSON.stringify(s))
     }
 
-    return <>
+    return schema && <>
         <button onClick={()=> handleRegenerate()}>Regenerate schema</button>
         <button onClick={() => handleSurrender()}>{surrender ? 'Restart':'Surrender'}</button>
-        <table>
+        <table >
             <thead>
             <tr>
                 <th scope="col"></th>
