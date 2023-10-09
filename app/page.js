@@ -1,20 +1,19 @@
 import Image from 'next/image'
 import { getDatabase, ref, get, child } from 'firebase/database'
 import app from './lib/db'
-import {buildSchema} from "@/app/lib/gameSchema";
 import Schema from "@/app/components/schema";
 import './home.css'
+import {buildSchema} from "@/app/lib/gameSchema";
 
 
 export default async function Home() {
   const pokemons = await getData()
-  let schema = buildSchema(pokemons);
+  let schema = buildSchema(pokemons)
 
   return (
     <main className="container-fluid">
-      <p>The schema is currently: </p>
-
-        <Schema schema={schema} pokemons={pokemons} />
+      <h3>Pokedoku Unlimited</h3>
+        <Schema pokemons={pokemons} firstSchema={schema} />
     </main>
   )
 }

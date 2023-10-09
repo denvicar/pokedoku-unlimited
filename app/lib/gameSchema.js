@@ -2,7 +2,7 @@ import {special, types, SCHEMA_SIZE, regions} from "@/app/lib/constants";
 
 const generateRows = (availableTypes) => {
     let rows = new Set()
-    for(let i = 0; i<SCHEMA_SIZE; i++) {
+    while(rows.size<SCHEMA_SIZE) {
         let type = getRandomElement([...availableTypes])
         if (type) {
             rows.add(type)
@@ -20,11 +20,9 @@ function generateColumns(pokemons) {
         columns = new Set()
         let availableTypes = new Set(types)
         rows = generateRows(availableTypes)
-        console.log('Rows generated: ',rows)
         let pokemonTypes = simplifyPokemons(pokemons,rows)
         for (let i = 0; i<SCHEMA_SIZE-1; i++) {
             availableTypes = getAvailableTypesByRows([...rows], pokemonTypes, availableTypes)
-            console.log("Available Types for columns: ",availableTypes)
             let type = getRandomElement([...availableTypes])
             if (type) {
                 columns.add(type)
@@ -41,7 +39,6 @@ const buildSchema = (pokemons) => {
     let partialSchema = generateColumns(pokemons)
     let rows = partialSchema[0]
     let columns = partialSchema[1]
-    console.log('Rows ',rows,' Columns ', columns)
 
 
     // filtro per regione, non posso fare mitici e leggendari per ora
@@ -78,7 +75,7 @@ const getAvailableRegionsByRows = (rows) => {
 }
 
 const getRandomElement = (ts) => {
-    let i = Math.floor(Math.random()*ts.length-1)
+    let i = Math.floor(Math.random()*ts.length)
     return ts[i]
 }
 
