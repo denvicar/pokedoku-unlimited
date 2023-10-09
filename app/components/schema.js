@@ -63,13 +63,20 @@ export default function Schema({pokemons,firstSchema}) {
         if (picked[row][col] === null) {
             return <button onClick={(e) => handleTableClick(row, col)}>{surrender ? 'Show list':'Pick guess'}</button>
         } else {
-            return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={100} height={100}/>
+            if(!surrender) {
+                return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={100} height={100}/>
+            } else {
+                return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={100} height={100} onClick={()=>handleTableClick(row,col)}/>
+            }
         }
     }
 
     function handleSurrender() {
         if (!surrender) {
             setSurrender(true)
+            setGuess('')
+            setGuessColor('')
+            setShow(false)
         } else {
             handleRegenerate()
         }
