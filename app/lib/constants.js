@@ -2,7 +2,7 @@ let types = [
     'fire',
     'water',
     'grass',
-    'thunder',
+    'electric',
     'ice',
     'poison',
     'ground',
@@ -16,6 +16,7 @@ let types = [
     'fighting',
     'psychic',
     'bug',
+    'steel',
 ]
 let regions = [
     'Kanto',
@@ -30,7 +31,8 @@ let regions = [
 ]
 let special = [
     'legendary',
-    'mythical'
+    'single-type',
+    'mega',
 ]
 
 const SCHEMA_SIZE = 3
