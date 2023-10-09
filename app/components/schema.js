@@ -71,8 +71,7 @@ export default function Schema({pokemons,firstSchema}) {
         if (!surrender) {
             setSurrender(true)
         } else {
-            setSurrender(false)
-            setSolutionTypes([])
+            handleRegenerate()
         }
     }
 

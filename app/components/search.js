@@ -13,7 +13,7 @@ export default function Search({pokemons, handlePick}) {
         <ul>
             {name.trim()!=='' &&
             pokemons
-                .filter(p => p.name.includes(name))
+                .filter(p => p.name.includes(name.trim().toLowerCase()))
                 .map(p => <li key={p.pokedex_number}>
                     <Image width={80} height={80} src={p.sprite_url} alt={p.name} />
                     <span style={{marginRight:'5px'}}>{p.display_name}</span>
