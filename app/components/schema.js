@@ -83,6 +83,8 @@ export default function Schema({pokemons,firstSchema}) {
         setGuessColor('')
         setTypes([])
         setLastIndexes([])
+        setSolutionTypes([])
+        setSurrender(false)
         setSchema(buildSchema(pokemons))
     }
 
