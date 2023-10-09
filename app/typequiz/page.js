@@ -2,13 +2,16 @@
 import getData from "@/app/lib/db";
 import {useEffect, useState} from "react";
 import Image from "next/image";
-import {regions} from "@/app/lib/constants";
+import {types} from "@/app/lib/constants";
 
-export default function TypeQuiz() {
+export default function RegionQuiz() {
     let [pokemons, setPokemons] = useState([])
     let [score, setScore] = useState(0)
-    let [error, setError] = useState(null)
-    let [disabled, setDisabled] = useState(regions.map(r=>false))
+    let [guess, setGuess] = useState('')
+    let [disabled, setDisabled] = useState([...types,'none'].map(r=>false))
+    let [partial,setPartial] = useState(false)
+    let [guessColor,setGuessColor] = useState('')
+
     useEffect(() => {
         let ignore = false
         getData().then(r => {
@@ -17,30 +20,42 @@ export default function TypeQuiz() {
                 let index = Math.floor(Math.random()*r.length)
                 setCurrent(r[index])
             }
-            })
+        })
         return () => {ignore=true}
     },[])
     let [current, setCurrent] = useState(null)
 
     function handleClick(r,i) {
-        if (current.region === r) {
-            setScore(score + 1)
-            setError(null)
-            setDisabled(disabled.map(x => false))
-            let index = Math.floor(Math.random()*pokemons.length)
-            setCurrent(pokemons[index])
+        if (current.types.includes(r) || (current.types.length===1 && r==='none')) {
+            if(partial) {
+                setScore(score + 1)
+                setGuess('')
+                setPartial(false)
+                setDisabled(disabled.map(x => false))
+                let index = Math.floor(Math.random()*pokemons.length)
+                setCurrent(pokemons[index])
+            } else {
+                setPartial(true)
+                setGuess('Correct, pick other type')
+                setGuessColor('green')
+                setDisabled(disabled.map((region,index) => index === i ? true : region))
+            }
+
         } else {
-            setError('Wrong guess! Try again')
-            setDisabled(disabled.map((region,index) => index === i))
+            setGuess('Wrong guess! Try again')
+            setGuessColor('red')
+            setDisabled(disabled.map((region,index) => index === i ? true : region))
         }
     }
 
-    return current !== null && <div>
+    return current !== null && <article>
         <h1>Score: {score}</h1>
         <Image src={current.sprite_url} alt={current.name} width={200} height={200}/>
         <h3>{current.display_name}</h3>
-        {error ?? <span style={{color:'red'}}>{error}</span>}
-        {regions.map((r,i) => <button disabled={disabled[i]} key={r} onClick={() => handleClick(r)}>{r}</button>)}
-    </div>
+        {guess !== '' && <span style={{color:guessColor}}>{guess}</span>}
+        <div>{types.map((r,i) => <button role={"button"} style={{width:'30%',margin:'5px',padding:'auto'}} disabled={disabled[i]} key={r} onClick={() => handleClick(r,i)} aria-label={r} >{r}</button>)}
+            <button role={"button"} style={{width:'30%',margin:'5px',padding:'auto'}} disabled={disabled[types.length]} onClick={() => handleClick('none',types.length)} aria-label={'none'} >none</button>
+        </div>
+    </article>
 }
 
