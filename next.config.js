@@ -9,7 +9,8 @@ const nextConfig = {
             }
         ]
     },
-    output: "export"
+    output: "export",
+    basePath:"/pokedoku-unlimited"
 }
 
 module.exports = nextConfig
