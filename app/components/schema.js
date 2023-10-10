@@ -142,13 +142,13 @@ export default function Schema({pokemons}) {
             <thead>
             <tr>
                 <th scope="col"><div style={{width:"4em"}}></div></th>
-                {schema[1].map(t => <th scope="col" key={t}>{constTypes.includes(t) ? <Image width={75} height={75} src={"/"+t+".png"}  alt={t}/> : <span className={"schema-text"}>{t}</span> }</th>)}
+                {schema[1].map(t => <th scope="col" key={t}>{constTypes.includes(t) ? <Image width={75} height={75} src={"/pokedoku-unlimited/"+t+".png"}  alt={t}/> : <span className={"schema-text"}>{t}</span> }</th>)}
             </tr>
             </thead>
             <tbody>
             {schema[0].map((type, i) => {
                 return <tr key={type}>
-                    <th scope="row">{constTypes.includes(type) ? <Image width={75} height={75} src={"/"+type+".png"}  alt={type}/> : <span className={"schema-text"}>{type}</span>}</th>
+                    <th scope="row">{constTypes.includes(type) ? <Image width={75} height={75} src={"/pokedoku-unlimited/"+type+".png"}  alt={type}/> : <span className={"schema-text"}>{type}</span>}</th>
                     <td>
                         {getCellContent(i, 0)}
                     </td>
