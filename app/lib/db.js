@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import {initializeApp} from "firebase/app";
 import {child, get, getDatabase, ref} from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -22,8 +22,7 @@ async function getData() {
 
     const dbRef = ref(getDatabase(app),"data")
     const data = await get(child(dbRef,"pokemons"))
-    let pokemons = Array.from(new Map(Object.entries(data.val())).values())
-    return pokemons.map(p => p.sprite_url === '' ? {...p, sprite_url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'} : p)
+    return Array.from(new Map(Object.entries(data.val())).values())
 }
 
 export default getData;
