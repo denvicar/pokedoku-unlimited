@@ -10,7 +10,7 @@ const nextConfig = {
         ]
     },
     output: "export",
-    basePath:"/pokedoku-unlimited/",
+    basePath:"/pokedoku-unlimited",
     assetPrefix:"/pokedoku-unlimited/"
 }
 
