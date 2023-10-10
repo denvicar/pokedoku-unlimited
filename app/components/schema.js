@@ -8,6 +8,7 @@ import {buildSchema} from "@/app/lib/gameSchema";
 import PokemonList from "@/app/components/pokemonList";
 import '../home.css'
 import {pick} from "next/dist/lib/pick";
+import {pokemonToCategoryArray} from "@/app/lib/utils";
 
 export default function Schema({pokemons}) {
     let [show, setShow] = useState(false)
@@ -67,41 +68,28 @@ export default function Schema({pokemons}) {
 
     function handlePokemonPick(p) {
         setShow(false)
-        if (regions.includes(types[1])) {
-            if (p.region === types[1] && (p.types[0]===types[0] || p.types[1]===types[0])) {
-                updatePicks(p)
-                setGuessColor("green")
-                setGuess("Correct guess!")
-            } else {
-                setGuessColor("red")
-                setGuess("Wrong guess!")
-            }
-        }else if (p.types.length > 1) {
-            if ((p.types[0] === types[0] || p.types[1] === types[0]) && (p.types[0] === types[1] || p.types[1] === types[1])) {
-                updatePicks(p)
-                setGuessColor("green")
-                setGuess("Correct guess!")
-            } else {
-                setGuessColor("red")
-                setGuess("Wrong guess!")
-            }
+        let pokemonCategoryArray = pokemonToCategoryArray(p)
+
+        if (pokemonCategoryArray.includes(types[0]) && pokemonCategoryArray.includes(types[1])) {
+            updatePicks(p)
+            setGuessColor("green")
+            setGuess("Correct guess!")
         } else {
             setGuessColor("red")
             setGuess("Wrong guess!")
         }
 
         if (picked.every(row=> row.every(item=>item))) setWin(true)
-
     }
 
     function getCellContent(row, col) {
         if (picked[row][col] === null) {
-            return <div className={types[0]===schema[0][row] && types[1]===schema[1][col] ? 'clicked':''} style={{border:'1px solid white',height:'5em',width:'5em'}} onClick={(e) => handleTableClick(row, col)}></div>
+            return <div className={types[0]===schema[0][row] && types[1]===schema[1][col] ? 'clicked':''} style={{border:'1px solid white',height:'4.5em',width:'4.5em'}} onClick={(e) => handleTableClick(row, col)}></div>
         } else {
             if(!surrender && !win) {
-                return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={120} height={120}/>
+                return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={150} height={150}/>
             } else {
-                return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={120} height={120} onClick={()=>handleTableClick(row,col)}/>
+                return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={150} height={150} onClick={()=>handleTableClick(row,col)}/>
             }
         }
     }

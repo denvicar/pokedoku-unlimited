@@ -2,18 +2,15 @@
 
 import Image from "next/image";
 import {regions} from "@/app/lib/constants";
+import {pokemonToCategoryArray} from "@/app/lib/utils";
 
 export default function PokemonList({pokemons,types}) {
     function filterPokemons(pList) {
-        if (regions.includes(types[1])) {
-            return pList.filter(p => p.region === types[1] && (p.types[0]===types[0] || p.types[1]===types[0]))
-        } else {
-            return pList
-                .filter(p => {
-                    return (p.types[0]===types[0] || p.types[0]===types[1]) &&
-                        (p.types[1]===types[0] || p.types[1]===types[1])
-                })
-        }
+        return pList
+            .filter(p => {
+                let pokemonCategoryArray = pokemonToCategoryArray(p)
+                return pokemonCategoryArray.includes(types[0]) && pokemonCategoryArray.includes(types[1]);
+            })
     }
 
     let displayedList = filterPokemons(pokemons)
