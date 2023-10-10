@@ -1,3 +1,4 @@
+let decodingArray = "abcdefghijklmnopqrstuvwxyz?!$@"
 let types = [
     'fire',
     'water',
@@ -37,4 +38,4 @@ let special = [
 
 const SCHEMA_SIZE = 3
 
-export {types,regions,special, SCHEMA_SIZE}
+export {types,regions,special, SCHEMA_SIZE, decodingArray}
