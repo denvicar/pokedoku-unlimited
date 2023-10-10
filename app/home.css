@@ -4,5 +4,7 @@
 
 .schema-text {
     font-family: 'Press Start 2P', serif;
-    font-size: small
+    font-size: xx-small;
+    margin-right: 0;
+    padding-right: 0;
 }
