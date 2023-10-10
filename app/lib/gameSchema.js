@@ -1,4 +1,4 @@
-import {special, types, SCHEMA_SIZE, regions} from "@/app/lib/constants";
+import {special, types, SCHEMA_SIZE, regions, decodingArray} from "@/app/lib/constants";
 import {getRandomArrayElement, pokemonToCategoryArray} from "@/app/lib/utils";
 
 // genero 3 righe pescando totalmente a caso tra tipi, regioni e speciali
@@ -56,6 +56,34 @@ const buildSchema = (pokemons) => {
     return [[...rows],[...columns]]
 }
 
+const buildSchemaCode = (schema) => {
+    let ret = ""
+    for (let row of schema) {
+        for (let col of row) {
+            let index = categories.indexOf(col)
+            console.log("current index ",index)
+            ret += decodingArray.charAt(index)
+        }
+    }
+    return ret
+}
+
+const decodeSchemaCode = (code) => {
+    code = code.trim().substring(0,6).toLowerCase()
+    let rows = []
+    let cols = []
+    for (let i = 0; i< code.length; i++) {
+        let index = decodingArray.indexOf(code.charAt(i))
+
+        if (i<3) {
+            rows.push(categories[index])
+        } else {
+            cols.push(categories[index])
+        }
+    }
+    return [[...rows],[...cols]]
+}
+
 const getAvailableCategoriesByRows = (rows, pokemonCategoryArray, availableCategories) => {
     let returnCategories = new Set()
     let pokemonExists = false
@@ -82,4 +110,4 @@ const mapPokemonsToCategoryArray = (pokemons,rows) => {
         .filter(pArray => pArray.some(category => rows.has(category)))
 }
 
-export {buildSchema}
+export {buildSchema, buildSchemaCode, decodeSchemaCode}

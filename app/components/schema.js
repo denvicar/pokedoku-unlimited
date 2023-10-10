@@ -4,11 +4,12 @@ import {useEffect, useState} from "react";
 import Search from "@/app/components/search";
 import Image from "next/image";
 import {regions, types as constTypes} from "@/app/lib/constants";
-import {buildSchema} from "@/app/lib/gameSchema";
+import {buildSchema, buildSchemaCode, decodeSchemaCode} from "@/app/lib/gameSchema";
 import PokemonList from "@/app/components/pokemonList";
 import '../home.css'
 import {pick} from "next/dist/lib/pick";
 import {pokemonToCategoryArray} from "@/app/lib/utils";
+import {decode} from "next/dist/shared/lib/base64-arraybuffer";
 
 export default function Schema({pokemons}) {
     let [show, setShow] = useState(false)
@@ -21,14 +22,20 @@ export default function Schema({pokemons}) {
     let [solutionTypes,setSolutionTypes] = useState([])
     let [surrender,setSurrender] = useState(false)
     let [win,setWin] = useState(false)
+    let [schemaCode,setSchemaCode] = useState("")
+    let [insertingCode,setInsertingCode] = useState(false)
+    let [inputCode,setInputCode] = useState("")
 
     useEffect(() => {
         let ignore = false;
         if (!ignore) {
             if (localStorage.getItem("schema")) {
-                setSchema(JSON.parse(localStorage.getItem("schema")))
+                let s = JSON.parse(localStorage.getItem("schema"))
+                setSchema(s)
+                setSchemaCode(buildSchemaCode(s))
             } else {
                 let s = buildSchema(pokemons)
+                setSchemaCode(buildSchemaCode(s))
                 setSchema(s)
                 localStorage.setItem("schema", JSON.stringify(s))
             }
@@ -116,16 +123,33 @@ export default function Schema({pokemons}) {
         setLastIndexes([])
         setSolutionTypes([])
         setSurrender(false)
+        setInsertingCode(false)
+        setInputCode("")
         let s = buildSchema(pokemons)
+        setSchemaCode(buildSchemaCode(s))
         setSchema(s)
         localStorage.setItem("schema",JSON.stringify(s))
         localStorage.removeItem("picks")
 
     }
 
+    function handleInsertCode(inputText) {
+        setInputCode(inputText)
+        if (inputText.trim().length===6 && new Set([...inputText]).size===inputText.length) {
+            handleRegenerate()
+            setInsertingCode(false)
+            setInputCode("")
+            setSchemaCode(inputText)
+            setSchema(decodeSchemaCode(inputText))
+            localStorage.setItem("schema",JSON.stringify(decodeSchemaCode(inputText)))
+        }
+    }
+
     return schema && <>
-        <button onClick={()=> handleRegenerate()}>Regenerate schema</button>
-        <button onClick={() => handleSurrender()}>{surrender ? 'Restart':'Surrender'}</button>
+        <h3>Pokedoku Unlimited - {schemaCode}</h3>
+        <span style={{marginRight:"0.5em"}} role={"button"} onClick={()=> handleRegenerate()}>New schema</span>
+        <span style={{marginRight:"0.5em"}} role={"button"} onClick={() => handleSurrender()}>{surrender ? 'Restart':'Surrender'}</span>
+        {insertingCode ? <input maxLength={6} minLength={6} type={"text"} value={inputCode} onChange={(e) => handleInsertCode(e.target.value)} /> : <span role={"button"} onClick={() => setInsertingCode(true)}>Insert code</span> }
         <table >
             <thead>
             <tr>
