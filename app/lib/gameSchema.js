@@ -1,5 +1,11 @@
 import {special, types, SCHEMA_SIZE, regions} from "@/app/lib/constants";
 
+// genero 3 righe pescando totalmente a caso tra tipi, regioni e speciali
+// rimuovo tutto quello che ho scelto e mi tengo quanto disponibile per le colonne
+// recupero i pokemon filtrano per quelli che hanno le caratteristiche di riga
+// ottengo i disponibili di colonna
+// pesco 3 a caso
+
 const generateRows = (availableTypes) => {
     let rows = new Set()
     while(rows.size<SCHEMA_SIZE) {

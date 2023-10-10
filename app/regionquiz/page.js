@@ -8,7 +8,7 @@ export default function RegionQuiz() {
     let [pokemons, setPokemons] = useState([])
     let [score, setScore] = useState(0)
     let [error, setError] = useState(null)
-    let [disabled, setDisabled] = useState(regions.map(r=>false))
+    let [disabled, setDisabled] = useState([...regions,"Hisui"].map(r=>false))
     useEffect(() => {
         let ignore = false
         getData().then(r => {
@@ -30,6 +30,7 @@ export default function RegionQuiz() {
             let index = Math.floor(Math.random()*pokemons.length)
             setCurrent(pokemons[index])
         } else {
+            setScore(0)
             setError('Wrong guess! Try again')
             setDisabled(disabled.map((region,index) => index === i ? true : region))
         }
@@ -40,7 +41,7 @@ export default function RegionQuiz() {
         <Image src={current.sprite_url} alt={current.name} width={200} height={200}/>
         <h3>{current.display_name}</h3>
         {error !== null && <span style={{color:"red"}}>{error}</span>}
-           <div>{regions.map((r,i) => <button role={"button"} style={{width:'45%',margin:'5px',padding:'auto'}} disabled={disabled[i]} key={r} onClick={() => handleClick(r,i)} aria-label={r} >{r}</button>)}
+           <div>{[...regions,"Hisui"].map((r,i) => <button role={"button"} style={{width:'45%',margin:'5px',padding:'auto'}} disabled={disabled[i]} key={r} onClick={() => handleClick(r,i)} aria-label={r} >{r}</button>)}
            </div>
     </article>
 }

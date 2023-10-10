@@ -42,6 +42,7 @@ export default function RegionQuiz() {
             }
 
         } else {
+            setScore(0)
             setGuess('Wrong guess! Try again')
             setGuessColor('red')
             setDisabled(disabled.map((region,index) => index === i ? true : region))

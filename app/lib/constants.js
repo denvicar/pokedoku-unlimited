@@ -30,9 +30,9 @@ let regions = [
     'Paldea',
 ]
 let special = [
-    'legendary',
-    'single-type',
-    'mega',
+    'Legendary',
+    'Mono-Type',
+    'Mega',
 ]
 
 const SCHEMA_SIZE = 3

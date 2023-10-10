@@ -1,12 +1,13 @@
 'use client'
 import {useEffect, useState} from "react";
 
-import ModalPicker from "@/app/components/modal";
 import Search from "@/app/components/search";
 import Image from "next/image";
-import {regions} from "@/app/lib/constants";
+import {regions, types as constTypes} from "@/app/lib/constants";
 import {buildSchema} from "@/app/lib/gameSchema";
 import PokemonList from "@/app/components/pokemonList";
+import '../home.css'
+import {pick} from "next/dist/lib/pick";
 
 export default function Schema({pokemons}) {
     let [show, setShow] = useState(false)
@@ -34,10 +35,26 @@ export default function Schema({pokemons}) {
         return ()=>{ignore=true}
     }, [pokemons]);
 
+    useEffect(() => {
+        let ignore = false;
+        if (!ignore) {
+            if (localStorage.getItem("picks")) {
+                setPicked(JSON.parse(localStorage.getItem("picks")))
+            }
+        }
+        return ()=>{ignore=true}
+    }, [pokemons]);
+
+    function updatePicks(p) {
+        let newPicked = picked.map((row, i) => i !== lastIndexes[0] ? row : row.map((col, j) => j !== lastIndexes[1] ? col : p))
+        setPicked(newPicked)
+        localStorage.setItem("picks",JSON.stringify(newPicked))
+    }
+
     function handleTableClick(rowIndex, colIndex) {
         setGuessColor('')
         setGuess('')
-        if(!surrender || !win) {
+        if(!surrender && !win) {
             setTypes([schema[0][rowIndex], schema[1][colIndex]])
             setLastIndexes([rowIndex, colIndex])
             console.log("Picked cell with types ", types)
@@ -52,7 +69,7 @@ export default function Schema({pokemons}) {
         setShow(false)
         if (regions.includes(types[1])) {
             if (p.region === types[1] && (p.types[0]===types[0] || p.types[1]===types[0])) {
-                setPicked(picked.map((row, i) => i !== lastIndexes[0] ? row : row.map((col, j) => j !== lastIndexes[1] ? col : p)))
+                updatePicks(p)
                 setGuessColor("green")
                 setGuess("Correct guess!")
             } else {
@@ -61,7 +78,7 @@ export default function Schema({pokemons}) {
             }
         }else if (p.types.length > 1) {
             if ((p.types[0] === types[0] || p.types[1] === types[0]) && (p.types[0] === types[1] || p.types[1] === types[1])) {
-                setPicked(picked.map((row, i) => i !== lastIndexes[0] ? row : row.map((col, j) => j !== lastIndexes[1] ? col : p)))
+                updatePicks(p)
                 setGuessColor("green")
                 setGuess("Correct guess!")
             } else {
@@ -79,12 +96,12 @@ export default function Schema({pokemons}) {
 
     function getCellContent(row, col) {
         if (picked[row][col] === null) {
-            return <button onClick={(e) => handleTableClick(row, col)}>{surrender ? 'Show list':'Pick guess'}</button>
+            return <div className={types[0]===schema[0][row] && types[1]===schema[1][col] ? 'clicked':''} style={{border:'1px solid white',height:'5em',width:'5em'}} onClick={(e) => handleTableClick(row, col)}></div>
         } else {
-            if(!surrender || !win) {
-                return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={100} height={100}/>
+            if(!surrender && !win) {
+                return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={120} height={120}/>
             } else {
-                return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={100} height={100} onClick={()=>handleTableClick(row,col)}/>
+                return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={120} height={120} onClick={()=>handleTableClick(row,col)}/>
             }
         }
     }
@@ -114,6 +131,8 @@ export default function Schema({pokemons}) {
         let s = buildSchema(pokemons)
         setSchema(s)
         localStorage.setItem("schema",JSON.stringify(s))
+        localStorage.removeItem("picks")
+
     }
 
     return schema && <>
@@ -122,14 +141,14 @@ export default function Schema({pokemons}) {
         <table >
             <thead>
             <tr>
-                <th scope="col"></th>
-                {schema[1].map(t => <th scope="col" key={t}>{t}</th>)}
+                <th scope="col"><div style={{width:"4em"}}></div></th>
+                {schema[1].map(t => <th scope="col" key={t}>{constTypes.includes(t) ? <Image width={75} height={75} src={"/"+t+".png"}  alt={t}/> : <span className={"schema-text"}>{t}</span> }</th>)}
             </tr>
             </thead>
             <tbody>
             {schema[0].map((type, i) => {
                 return <tr key={type}>
-                    <th scope="row">{type}</th>
+                    <th scope="row">{constTypes.includes(type) ? <Image width={75} height={75} src={"/"+type+".png"}  alt={type}/> : <span className={"schema-text"}>{type}</span>}</th>
                     <td>
                         {getCellContent(i, 0)}
                     </td>
