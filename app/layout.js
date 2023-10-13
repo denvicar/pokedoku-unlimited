@@ -15,6 +15,7 @@ export default function RootLayout({children}) {
         <head>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"/>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Press+Start+2P" />
+            <link rel={"icon"} href={"/favicon.ico"} sizes={"any"} />
         </head>
         <body className={inter.className + " container-fluid"}>
         <nav>
