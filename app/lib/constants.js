@@ -1,4 +1,4 @@
-let decodingArray = "abcdefghijklmnopqrstuvwxyz?!$@&%"
+let decodingArray = "abcdefghijklmnopqrstuvwxyz?!$@&%#*"
 let types = [
     'fire',
     'water',
@@ -35,7 +35,9 @@ let special = [
     'Monotype',
     'Mega',
     'Fossil',
-    'Baby'
+    'Baby',
+    'Evolved',
+    'BaseForm'
 ]
 
 const SCHEMA_SIZE = 3
