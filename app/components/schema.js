@@ -2,14 +2,11 @@
 import {useEffect, useState} from "react";
 
 import Search from "@/app/components/search";
-import Image from "next/image";
-import {regions, types as constTypes} from "@/app/lib/constants";
+import { types as constTypes} from "@/app/lib/constants";
 import {buildSchema, buildSchemaCode, decodeSchemaCode} from "@/app/lib/gameSchema";
 import PokemonList from "@/app/components/pokemonList";
 import '../home.css'
-import {pick} from "next/dist/lib/pick";
 import {pokemonToCategoryArray} from "@/app/lib/utils";
-import {decode} from "next/dist/shared/lib/base64-arraybuffer";
 
 export default function Schema({pokemons}) {
     let [show, setShow] = useState(false)
@@ -91,12 +88,12 @@ export default function Schema({pokemons}) {
 
     function getCellContent(row, col) {
         if (picked[row][col] === null) {
-            return <div className={types[0]===schema[0][row] && types[1]===schema[1][col] ? 'clicked':''} style={{border:'1px solid white',height:'4.5em',width:'4.5em'}} onClick={(e) => handleTableClick(row, col)}></div>
+            return <div className={types[0]===schema[0][row] && types[1]===schema[1][col] ? 'clicked':''} style={{border:'1px solid white',height:'4.5em',width:'4.5em'}} onClick={() => handleTableClick(row, col)}></div>
         } else {
             if(!surrender && !win) {
-                return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={150} height={150}/>
+                return <img src={picked[row][col].sprite_url} alt={picked[row][col].name} width={150} height={"auto"}/>
             } else {
-                return <Image src={picked[row][col].sprite_url} alt={picked[row][col].name} width={150} height={150} onClick={()=>handleTableClick(row,col)}/>
+                return <img src={picked[row][col].sprite_url} alt={picked[row][col].name} width={150} height={"auto"} onClick={()=>handleTableClick(row,col)}/>
             }
         }
     }
@@ -154,13 +151,13 @@ export default function Schema({pokemons}) {
             <thead>
             <tr>
                 <th scope="col"><div style={{width:"4em"}}></div></th>
-                {schema[1].map(t => <th scope="col" key={t}>{constTypes.includes(t) ? <Image width={75} height={75} src={"/pokedoku-unlimited/"+t+".png"}  alt={t}/> : <span className={"schema-text"}>{t}</span> }</th>)}
+                {schema[1].map(t => <th scope="col" key={t}>{constTypes.includes(t) ? <img width={75} height={"auto"} src={"/"+t+".png"}  alt={t}/> : <span className={"schema-text"}>{t}</span> }</th>)}
             </tr>
             </thead>
             <tbody>
             {schema[0].map((type, i) => {
                 return <tr key={type}>
-                    <th scope="row">{constTypes.includes(type) ? <Image width={75} height={75} src={"/pokedoku-unlimited/"+type+".png"}  alt={type}/> : <span className={"schema-text"}>{type}</span>}</th>
+                    <th scope="row">{constTypes.includes(type) ? <img width={75} height={"auto"} src={"/"+type+".png"}  alt={type}/> : <span className={"schema-text"}>{type}</span>}</th>
                     <td>
                         {getCellContent(i, 0)}
                     </td>

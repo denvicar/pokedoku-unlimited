@@ -1,7 +1,5 @@
 'use client'
 
-import Image from "next/image";
-import {regions} from "@/app/lib/constants";
 import {pokemonToCategoryArray} from "@/app/lib/utils";
 
 export default function PokemonList({pokemons,types}) {
@@ -18,7 +16,7 @@ export default function PokemonList({pokemons,types}) {
         {types.length===2 &&
             displayedList
                 .map(p => <li style={{listStyleType:'none'}} key={p.pokedex_number}>
-                    <Image width={80} height={80} src={p.sprite_url} alt={p.name} />
+                    <img width={80} height={"auto"} src={p.sprite_url} alt={p.name} />
                     <span style={{marginRight:'5px'}}>{p.display_name}</span>
                     <span style={{marginRight:'5px'}}>{p.types[0]}</span>
                     {p.types.length >1 && <span style={{marginRight:'5px'}}>{p.types[1]}</span>}
