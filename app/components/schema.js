@@ -2,7 +2,6 @@
 import {useEffect, useState} from "react";
 
 import Search from "@/app/components/search";
-import Image from "next/image";
 import { types as constTypes} from "@/app/lib/constants";
 import {buildSchema, buildSchemaCode, decodeSchemaCode} from "@/app/lib/gameSchema";
 import PokemonList from "@/app/components/pokemonList";
@@ -89,7 +88,7 @@ export default function Schema({pokemons}) {
 
     function getCellContent(row, col) {
         if (picked[row][col] === null) {
-            return <div className={types[0]===schema[0][row] && types[1]===schema[1][col] ? 'clicked':''} style={{border:'1px solid white',height:'4.5em',width:'4.5em'}} onClick={(e) => handleTableClick(row, col)}></div>
+            return <div className={types[0]===schema[0][row] && types[1]===schema[1][col] ? 'clicked':''} style={{border:'1px solid white',height:'4.5em',width:'4.5em'}} onClick={() => handleTableClick(row, col)}></div>
         } else {
             if(!surrender && !win) {
                 return <img src={picked[row][col].sprite_url} alt={picked[row][col].name} width={150} height={"auto"}/>

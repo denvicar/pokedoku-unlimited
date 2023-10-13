@@ -1,10 +1,8 @@
 'use client'
 import {useState} from "react";
-import Image from "next/image";
 
 export default function Search({pokemons, handlePick}) {
     let [name, setName] = useState("")
-    let p = ""
 
     return <div>
         <input value={name} onChange={(e) => setName(e.target.value)} type="text"

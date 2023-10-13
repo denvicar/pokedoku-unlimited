@@ -1,6 +1,5 @@
 'use client'
 
-import Image from "next/image";
 import {pokemonToCategoryArray} from "@/app/lib/utils";
 
 export default function PokemonList({pokemons,types}) {
