@@ -1,6 +1,7 @@
 'use client'
 
 import {pokemonToCategoryArray} from "@/app/lib/utils";
+import Button from "@/app/components/button";
 
 export default function PokemonList({pokemons,types}) {
     function filterPokemons(pList) {
@@ -12,15 +13,16 @@ export default function PokemonList({pokemons,types}) {
     }
 
     let displayedList = filterPokemons(pokemons)
-    return <ul style={{padding:0,margin:0,listStyle:'none'}}>
+    return <div>
         {types.length===2 &&
             displayedList
-                .map(p => <li style={{listStyleType:'none'}} key={p.pokedex_number}>
-                    <img width={80} height={"auto"} src={p.sprite_url} alt={p.name} />
-                    <span style={{marginRight:'5px'}}>{p.display_name}</span>
-                    <span style={{marginRight:'5px'}}>{p.types[0]}</span>
-                    {p.types.length >1 && <span style={{marginRight:'5px'}}>{p.types[1]}</span>}
-                    </li>)}
-    </ul>
+                .map(p =>
+                    <div key={p.pokedex_number} className={"flex flex-row flex-nowrap justify-around"}>
+                        <img src={p.sprite_url} alt={p.name} />
+                        <div><span className={"align-middle mr-2 leading-[5rem]"}>{p.display_name}</span>
+                            <span className={"mr-1 leading-[5rem] align-middle"}>{p.types[0]}</span>
+                            {p.types.length >1 && <span className={"leading-[5rem] align-middle"}>{p.types[1]}</span>}</div>
+                    </div>)}
+    </div>
 
 }

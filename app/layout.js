@@ -1,6 +1,7 @@
-//import './globals.css'
+import './globals.css'
 import {Inter} from 'next/font/google'
 import Link from "next/link";
+
 
 const inter = Inter({subsets: ['latin']})
 
@@ -11,20 +12,16 @@ export const metadata = {
 
 export default function RootLayout({children}) {
     return (
-        <html lang="en">
+        <html lang="en" className={"bg-slate-800"}>
         <head>
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"/>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Press+Start+2P" />
+            {/*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"/>*/}
             <link rel={"icon"} href={"/favicon.ico"} sizes={"any"} />
         </head>
-        <body className={inter.className + " container-fluid"}>
-        <nav>
-            <ul>
-                <li><Link href="/">Pokedoku</Link></li>
-                <li><Link href="/regionquiz/">Region quiz</Link></li>
-                <li><Link href="/typequiz/">Type quiz</Link></li>
-
-            </ul>
+        <body className={inter.className}>
+        <nav className={"flex flex-row bg-slate-900 gap-4"}>
+            <div className={"hover:bg-slate-600 rounded-full p-1"}><Link href="/">Pokedoku</Link></div>
+            <div className={"hover:bg-slate-600 rounded-full p-1"}><Link href="/regionquiz/">Region quiz</Link></div>
+            <div className={"hover:bg-slate-600 rounded-full p-1"}><Link href="/typequiz/">Type quiz</Link></div>
         </nav>
 
         {children}</body>
