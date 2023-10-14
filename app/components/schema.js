@@ -153,18 +153,18 @@ export default function Schema({pokemons}) {
         <div className={"flex flex-row flex-nowrap justify-center gap-4"}>
             <Button handleClick={()=> handleRegenerate()} label={"New schema"} />
             <Button handleClick={() => handleSurrender()} label={surrender ? 'Restart':'Surrender'} />
-            {insertingCode ? <input maxLength={6} minLength={6} type={"text"} value={inputCode} onChange={(e) => handleInsertCode(e.target.value)} /> : <Button handleClick={() => setInsertingCode(true)} label={"Insert code"} /> }
+            {insertingCode ? <input className={"bg-slate-800 px-2 rounded-full border border-slate-50 w-5/6 hover:bg-slate-600 focus:bg-slate-600 focus:outline-none"} maxLength={6} minLength={6} type={"text"} value={inputCode} onChange={(e) => handleInsertCode(e.target.value)} /> : <Button handleClick={() => setInsertingCode(true)} label={"Insert code"} /> }
         </div>
 
         {/*Schema*/}
         <div className={"flex flex-col flex-nowrap"}>
             <div className={"flex flex-row flex-nowrap justify-end"}>
                 <div className={"w-1/4"}></div>
-                {schema[1].map(t => <div className={"w-1/4 flex-none text-center"} key={t}>{constTypes.includes(t) ? <img className={"w-5/6 m-auto"} src={"/pokedoku-unlimited/"+t+".png"}  alt={t}/> : <span className={"font-semibold uppercase font-poke text-[0.6rem] text-center align-middle break-words leading-[3rem] m-auto"}>{t}</span> }</div>)}
+                {schema[1].map(t => <div className={"w-1/4 flex-none text-center"} key={t}>{constTypes.includes(t) ? <img className={"w-5/6 m-auto"} src={t+".png"}  alt={t}/> : <span className={"font-semibold uppercase font-poke text-[0.6rem] text-center align-middle break-words leading-[3rem] m-auto"}>{t}</span> }</div>)}
             </div>
             {schema[0].map((type, i) => {
                 return <div key={type} className={"flex flex-row flex-nowrap justify-around"}>
-                    <div className={"w-1/4 flex-none aspect-square text-center"}>{constTypes.includes(type) ? <img className={"w-5/6 mx-auto mt-7"} src={"/pokedoku-unlimited/"+type+".png"}  alt={type}/> : <span className={"font-semibold uppercase font-poke text-[0.6rem] text-center align-middle break-words leading-[5.5rem]"}>{type}</span>}</div>
+                    <div className={"w-1/4 flex-none aspect-square text-center"}>{constTypes.includes(type) ? <img className={"w-5/6 mx-auto mt-7"} src={type+".png"}  alt={type}/> : <span className={"font-semibold uppercase font-poke text-[0.6rem] text-center align-middle break-words leading-[5.5rem]"}>{type}</span>}</div>
                     <div className={"flex-none w-1/4 aspect-square"}>
                         {getCellContent(i, 0)}
                     </div>
