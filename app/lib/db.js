@@ -16,10 +16,16 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 
 async function getData() {
+    if (process.env.NEXT_PUBLIC_ENV === 'development') {
+        let data = await (await fetch(process.env.NEXT_PUBLIC_SERVER_URL)).json()
+        console.log("Received data from local db")
+        return Array.from(new Map(Object.entries(data["pokemons"])).values())
+    }
 
+    const app = initializeApp(firebaseConfig);
     const dbRef = ref(getDatabase(app),"data")
     const data = await get(child(dbRef,"pokemons"))
     return Array.from(new Map(Object.entries(data.val())).values())

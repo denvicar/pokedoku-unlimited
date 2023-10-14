@@ -6,7 +6,8 @@ import { types as constTypes} from "@/app/lib/constants";
 import {buildSchema, buildSchemaCode, decodeSchemaCode} from "@/app/lib/gameSchema";
 import PokemonList from "@/app/components/pokemonList";
 import '../home.css'
-import {pokemonToCategoryArray} from "@/app/lib/utils";
+import {checkWinningPicks, pokemonToCategoryArray} from "@/app/lib/utils";
+import Button from "@/app/components/button";
 
 export default function Schema({pokemons}) {
     let [show, setShow] = useState(false)
@@ -44,7 +45,9 @@ export default function Schema({pokemons}) {
         let ignore = false;
         if (!ignore) {
             if (localStorage.getItem("picks")) {
-                setPicked(JSON.parse(localStorage.getItem("picks")))
+                let picks = JSON.parse(localStorage.getItem("picks"))
+                setPicked(picks)
+                if (checkWinningPicks(picks)) setWin(true)
             }
         }
         return ()=>{ignore=true}
@@ -53,6 +56,7 @@ export default function Schema({pokemons}) {
     function updatePicks(p) {
         let newPicked = picked.map((row, i) => i !== lastIndexes[0] ? row : row.map((col, j) => j !== lastIndexes[1] ? col : p))
         setPicked(newPicked)
+        if (checkWinningPicks(newPicked)) setWin(true)
         localStorage.setItem("picks",JSON.stringify(newPicked))
     }
 
@@ -82,18 +86,16 @@ export default function Schema({pokemons}) {
             setGuessColor("red")
             setGuess("Wrong guess!")
         }
-
-        if (picked.every(row=> row.every(item=>item))) setWin(true)
     }
 
     function getCellContent(row, col) {
         if (picked[row][col] === null) {
-            return <div className={types[0]===schema[0][row] && types[1]===schema[1][col] ? 'clicked':''} style={{border:'1px solid white',height:'4.5em',width:'4.5em'}} onClick={() => handleTableClick(row, col)}></div>
+            return <div className={"hover:bg-orange-200 border h-full"} style={{backgroundColor: types[0]===schema[0][row]&& types[1]===schema[1][col] ? "coral":""}} onClick={() => handleTableClick(row, col)}></div>
         } else {
             if(!surrender && !win) {
-                return <img src={picked[row][col].sprite_url} alt={picked[row][col].name} width={150} height={"auto"}/>
+                return <div className={"h-full w-full border"} ><img src={picked[row][col].sprite_url} alt={picked[row][col].name} /></div>
             } else {
-                return <img src={picked[row][col].sprite_url} alt={picked[row][col].name} width={150} height={"auto"} onClick={()=>handleTableClick(row,col)}/>
+                return <div className={"h-full w-full border"} ><img src={picked[row][col].sprite_url} alt={picked[row][col].name} onClick={()=>handleTableClick(row,col)}/></div>
             }
         }
     }
@@ -142,38 +144,69 @@ export default function Schema({pokemons}) {
         }
     }
 
-    return schema && <>
-        <h3>Pokedoku Unlimited - {schemaCode}</h3>
-        <span style={{marginRight:"0.5em"}} role={"button"} onClick={()=> handleRegenerate()}>New schema</span>
-        <span style={{marginRight:"0.5em"}} role={"button"} onClick={() => handleSurrender()}>{surrender ? 'Restart':'Surrender'}</span>
-        {insertingCode ? <input maxLength={6} minLength={6} type={"text"} value={inputCode} onChange={(e) => handleInsertCode(e.target.value)} /> : <span role={"button"} onClick={() => setInsertingCode(true)}>Insert code</span> }
-        <table >
-            <thead>
-            <tr>
-                <th scope="col"><div style={{width:"4em"}}></div></th>
-                {schema[1].map(t => <th scope="col" key={t}>{constTypes.includes(t) ? <img width={75} height={"auto"} src={"/"+t+".png"}  alt={t}/> : <span className={"schema-text"}>{t}</span> }</th>)}
-            </tr>
-            </thead>
-            <tbody>
+    return schema && <div className={"flex flex-col flex-nowrap gap-3"}>
+        {/*title*/}
+        <h3 className={"text-2xl font-bold text-center"}>Pokedoku Unlimited - {schemaCode}</h3>
+
+        {/*Buttons*/}
+        <div className={"flex flex-row flex-nowrap justify-center gap-4"}>
+            <Button handleClick={()=> handleRegenerate()} label={"New schema"} />
+            <Button handleClick={() => handleSurrender()} label={surrender ? 'Restart':'Surrender'} />
+            {insertingCode ? <input maxLength={6} minLength={6} type={"text"} value={inputCode} onChange={(e) => handleInsertCode(e.target.value)} /> : <Button handleClick={() => setInsertingCode(true)} label={"Insert code"} /> }
+        </div>
+
+        {/*Schema*/}
+        <div className={"flex flex-col flex-nowrap"}>
+            <div className={"flex flex-row flex-nowrap justify-end"}>
+                <div className={"w-1/4"}></div>
+                {schema[1].map(t => <div className={"w-1/4 flex-none text-center"} key={t}>{constTypes.includes(t) ? <img className={"w-5/6 m-auto"} src={"/"+t+".png"}  alt={t}/> : <span className={"font-semibold uppercase font-poke text-[0.6rem] text-center align-middle break-words leading-[3rem] m-auto"}>{t}</span> }</div>)}
+            </div>
             {schema[0].map((type, i) => {
-                return <tr key={type}>
-                    <th scope="row">{constTypes.includes(type) ? <img width={75} height={"auto"} src={"/"+type+".png"}  alt={type}/> : <span className={"schema-text"}>{type}</span>}</th>
-                    <td>
+                return <div key={type} className={"flex flex-row flex-nowrap justify-around"}>
+                    <div className={"w-1/4 flex-none aspect-square text-center"}>{constTypes.includes(type) ? <img className={"w-5/6 mx-auto mt-7"} src={"/"+type+".png"}  alt={type}/> : <span className={"font-semibold uppercase font-poke text-[0.6rem] text-center align-middle break-words leading-[5.5rem]"}>{type}</span>}</div>
+                    <div className={"flex-none w-1/4 aspect-square"}>
                         {getCellContent(i, 0)}
-                    </td>
-                    <td>
+                    </div>
+                    <div className={"w-1/4 flex-none aspect-square"}>
                         {getCellContent(i, 1)}
-                    </td>
-                    <td>
+                    </div>
+                    <div className={"w-1/4 flex-none aspect-square"}>
                         {getCellContent(i, 2)}
-                    </td>
-                </tr>
+                    </div>
+                </div>
             })}
-            </tbody>
-        </table>
-        {guess!=='' && <span style={{color:guessColor}}>{guess}</span>}
+
+        </div>
+
+
+        {/*<table >*/}
+        {/*    <thead>*/}
+        {/*    <tr>*/}
+        {/*        <th scope="col"><div style={{width:"4em"}}></div></th>*/}
+        {/*        {schema[1].map(t => <th scope="col" key={t}>{constTypes.includes(t) ? <img width={75} height={"auto"} src={"/"+t+".png"}  alt={t}/> : <span className={"schema-text"}>{t}</span> }</th>)}*/}
+        {/*    </tr>*/}
+        {/*    </thead>*/}
+        {/*    <tbody>*/}
+        {/*    {schema[0].map((type, i) => {*/}
+        {/*        return <tr key={type}>*/}
+        {/*            <th scope="row">{constTypes.includes(type) ? <img width={75} height={"auto"} src={"/"+type+".png"}  alt={type}/> : <span className={"schema-text"}>{type}</span>}</th>*/}
+        {/*            <td>*/}
+        {/*                {getCellContent(i, 0)}*/}
+        {/*            </td>*/}
+        {/*            <td>*/}
+        {/*                {getCellContent(i, 1)}*/}
+        {/*            </td>*/}
+        {/*            <td>*/}
+        {/*                {getCellContent(i, 2)}*/}
+        {/*            </td>*/}
+        {/*        </tr>*/}
+        {/*    })}*/}
+        {/*    </tbody>*/}
+        {/*</table>*/}
+
+        {guess!=='' && <span className={"ml-2"} style={{color:guessColor}}>{guess}</span>}
         {show && <Search pokemons={pokemons} handlePick={handlePokemonPick}/>}
         <PokemonList pokemons={pokemons} types={solutionTypes} />
 
-    </>
+    </div>
 }

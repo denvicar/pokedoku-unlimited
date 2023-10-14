@@ -14,3 +14,7 @@ export const pokemonToCategoryArray = (pokemon) => {
     if (pokemon.types.length===1) ret.push("Monotype")
     return ret
 }
+
+export const checkWinningPicks = (picks) => {
+    if (picks.every(row => row.every(item => item!==null))) return true
+}

@@ -7,7 +7,7 @@ export default async function Home() {
   const pokemons = await getData()
 
   return (
-    <main>
+    <main className={"bg-slate-800"}>
         <Schema pokemons={pokemons} />
     </main>
   )
