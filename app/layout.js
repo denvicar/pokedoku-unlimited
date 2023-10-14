@@ -15,7 +15,7 @@ export default function RootLayout({children}) {
         <html lang="en" className={"bg-slate-800"}>
         <head>
             {/*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"/>*/}
-            <link rel={"icon"} href={"/favicon.ico"} sizes={"any"} />
+            <link rel={"icon"} href={"/pokedoku-unlimited/favicon.ico"} sizes={"any"} />
         </head>
         <body className={inter.className}>
         <nav className={"flex flex-row bg-slate-900 gap-4"}>
