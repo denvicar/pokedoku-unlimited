@@ -24,7 +24,8 @@ export default function RootLayout({children}) {
             <div className={"hover:bg-slate-600 rounded-full p-1"}><Link href="/typequiz/">Type quiz</Link></div>
         </nav>
 
-        {children}</body>
+        <div className={"md:w-1/2 lg:w-1/3"}>{children}</div>
+        </body>
         </html>
     )
 }
