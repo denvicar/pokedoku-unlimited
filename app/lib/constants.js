@@ -1,5 +1,6 @@
-let decodingArray = "abcdefghijklmnopqrstuvwxyz?!$@&%#*"
-let types = [
+const decodingArray = "abcdefghijklmnopqrstuvwxyz0123456789"
+
+const types = [
     'fire',
     'water',
     'grass',
@@ -19,7 +20,7 @@ let types = [
     'bug',
     'steel',
 ]
-let regions = [
+const regions = [
     'Kanto',
     'Johto',
     'Hoenn',
@@ -30,14 +31,16 @@ let regions = [
     'Galar',
     'Paldea',
 ]
-let special = [
+const special = [
     'Legendary',
     'Monotype',
     'Mega',
     'Fossil',
     'Baby',
     'Evolved',
-    'BaseForm'
+    'BaseForm',
+    'Dual Type',
+    'Paradox'
 ]
 
 const SCHEMA_SIZE = 3
