@@ -8,7 +8,7 @@ export default async function RegionQuizHome() {
     const pokemons = Array.from(new Map(Object.entries(json['data']['pokemons'])).values())
 
 
-    return <main className={"bg-slate-800"}>
+    return <main>
         <RegionQuiz pokemons={pokemons} />
     </main>
 }

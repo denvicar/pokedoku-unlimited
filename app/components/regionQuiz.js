@@ -33,7 +33,7 @@ export default function RegionQuiz({pokemons}) {
             {[...regions,"Hisui"]
                 .map((r,i) =>
                     <div className={"basis-1/3 px-3"} key={r}>
-                        <button className={"w-full mb-2 disabled:bg-gray-500 bg-blue-800 hover:bg-blue-500 rounded-full py-1 px-2 font-semibold"}
+                        <button className={"w-full mb-2 disabled:bg-gray-500 bg-blue-200 dark:bg-blue-800 hover:bg-blue-500 rounded-full py-1 px-2 font-semibold"}
                                 disabled={disabled[i]} onClick={() => handleClick(r,i)}>{r}</button>
                     </div> )}
         </div>
