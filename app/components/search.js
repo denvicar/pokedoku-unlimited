@@ -1,21 +1,30 @@
 'use client'
 import {useState} from "react";
 import Button from "@/app/components/button";
+import Fuse from 'fuse.js'
 
 export default function Search({pokemons, handlePick}) {
+
     let [name, setName] = useState("")
+    const options = {
+        includeScore: false,
+        keys: ['display_name']
+    }
+    const fuse = new Fuse(pokemons,options)
+
 
     return <div>
-        <input className={"bg-slate-800 px-2 rounded-full border border-slate-50 w-5/6 h-10 ml-1 hover:bg-slate-600 focus:bg-slate-600 focus:outline-none"} value={name} onChange={(e) => setName(e.target.value)} type="text"
+        <input className={"bg-slate-200 placeholder-gray-800/75 dark:placeholder-gray-50/75 px-2 dark:bg-slate-800 rounded-full border border-slate-800 dark:border-slate-50 w-5/6 h-10 ml-1 hover:bg-slate-400 focus:bg-slate-400 dark:hover:bg-slate-600 dark:focus:bg-slate-600 focus:outline-none"} value={name} onChange={(e) => setName(e.target.value)} type="text"
                placeholder="Start writing the pokemon name..."/>
 
 
 
 
             {name.trim()!=='' &&
-            pokemons
-                .filter(p => p.name.includes(name.trim().toLowerCase()))
-                .map(p =>
+                fuse.search(name)
+                    .map(searchItem => searchItem.item)
+                    .slice(0,10)
+                    .map(p =>
                     <div key={p.pokedex_number} className={"flex flex-row flex-nowrap justify-around"}>
                         <img src={p.sprite_url} alt={p.name} />
                         <div><span className={"align-middle mr-2 leading-[5rem]"}>{p.display_name}</span>

@@ -10,7 +10,7 @@ export default async function Home() {
     const pokemons = Array.from(new Map(Object.entries(json['data']['pokemons'])).values())
 
     return (
-        <main className={"bg-slate-800"}>
+        <main>
             <Schema pokemons={pokemons}/>
         </main>
     )
