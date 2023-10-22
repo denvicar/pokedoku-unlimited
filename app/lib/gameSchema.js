@@ -1,5 +1,5 @@
 import {special, types, SCHEMA_SIZE, regions, decodingArray} from "@/app/lib/constants";
-import {getRandomArrayElement, pokemonToCategoryArray} from "@/app/lib/utils";
+import {areSetsEqual, getRandomArrayElement, pokemonToCategoryArray} from "@/app/lib/utils";
 
 // genero 3 righe pescando totalmente a caso tra tipi, regioni e speciali
 // rimuovo tutto quello che ho scelto e mi tengo quanto disponibile per le colonne
@@ -25,6 +25,7 @@ function generateColumns(pokemons) {
     let columns = new Set()
 
     while (columns.size !== 3) {
+        let solutionSets = []
         columns = new Set()
         let availableCategories = new Set(categories)
         rows = generateRows(availableCategories)
@@ -33,7 +34,8 @@ function generateColumns(pokemons) {
             availableCategories = getAvailableCategoriesByRows([...rows], pokemonCategories, availableCategories)
             let category = getRandomArrayElement([...availableCategories])
             if (category) {
-                columns.add(category)
+                solutionSets.push(...getSolutionSets(rows,category,pokemonCategories))
+                if (checkSolutionSets(solutionSets)) columns.add(category)
                 availableCategories.delete(category)
             }
         }
@@ -41,6 +43,31 @@ function generateColumns(pokemons) {
 
     return [rows,columns]
 
+}
+
+const checkSolutionSets = (solutionSets) => {
+    for (const set of solutionSets) {
+        let count = 1;
+        for (let i = 0; i<solutionSets.length; i++) {
+            if (areSetsEqual(set, solutionSets[i])) {
+                count++
+            }
+        }
+        if (set.size <= count) return false
+    }
+    return true
+}
+
+
+const getSolutionSets = (rows, colCategory, pokemonCategoryArray) => {
+    let solutionSets = []
+    for (const rowCategory of rows ) {
+        let s = new Set(pokemonCategoryArray
+            .filter(pcat => pcat.includes(rowCategory) && pcat.includes(colCategory))
+            .map(pcat => pcat[0]))
+        if (s.size < 9) solutionSets.push(s)
+    }
+    return solutionSets
 }
 
 const buildSchema = (pokemons) => {
@@ -61,7 +88,6 @@ const buildSchemaCode = (schema) => {
     for (let row of schema) {
         for (let col of row) {
             let index = categories.indexOf(col)
-            console.log("current index ",index)
             ret += decodingArray.charAt(index)
         }
     }

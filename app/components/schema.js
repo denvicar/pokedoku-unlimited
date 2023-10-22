@@ -2,7 +2,7 @@
 import {useEffect, useState} from "react";
 
 import Search from "@/app/components/search";
-import { types as constTypes} from "@/app/lib/constants";
+import { types as constTypes, SCHEMA_SIZE} from "@/app/lib/constants";
 import {buildSchema, buildSchemaCode, decodeSchemaCode} from "@/app/lib/gameSchema";
 import PokemonList from "@/app/components/pokemonList";
 import '../home.css'
@@ -11,7 +11,7 @@ import Button from "@/app/components/button";
 
 export default function Schema({pokemons}) {
     let [show, setShow] = useState(false)
-    let [picked, setPicked] = useState([[null, null, null], [null, null, null], [null, null, null]])
+    let [picked, setPicked] = useState(Array.from({length:SCHEMA_SIZE}, () => Array.from({length:SCHEMA_SIZE},()=>null)))
     let [types, setTypes] = useState([])
     let [lastIndexes, setLastIndexes] = useState([])
     let [guess,setGuess] = useState('')
@@ -93,9 +93,9 @@ export default function Schema({pokemons}) {
             return <div className={"hover:bg-orange-200 border h-full"} style={{backgroundColor: types[0]===schema[0][row]&& types[1]===schema[1][col] ? "coral":""}} onClick={() => handleTableClick(row, col)}></div>
         } else {
             if(!surrender && !win) {
-                return <div className={"h-full w-full border"} ><img src={picked[row][col].sprite_url} alt={picked[row][col].name} /></div>
+                return <div className={"h-full w-full border relative"} ><img src={picked[row][col].sprite_url} alt={picked[row][col].name} /><span className={"text-[0.7em] absolute bottom-2 left-2 bg-black/70"}>{picked[row][col].display_name}</span></div>
             } else {
-                return <div className={"h-full w-full border"} ><img src={picked[row][col].sprite_url} alt={picked[row][col].name} onClick={()=>handleTableClick(row,col)}/></div>
+                return <div className={"h-full w-full border relative"} ><img src={picked[row][col].sprite_url} alt={picked[row][col].name} onClick={()=>handleTableClick(row,col)}/><span className={"text-[0.7em] absolute bottom-2 left-2 bg-black/70"}>{picked[row][col].display_name}</span></div>
             }
         }
     }
@@ -114,7 +114,7 @@ export default function Schema({pokemons}) {
 
     function handleRegenerate() {
         setWin(false)
-        setPicked([[null, null, null], [null, null, null], [null, null, null]])
+        setPicked(picked.map(row => row.map(col => null)))
         setShow(false)
         setGuess('')
         setGuessColor('')
