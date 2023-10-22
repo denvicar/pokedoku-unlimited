@@ -25,7 +25,7 @@ export default function Search({pokemons, handlePick}) {
                     .map(searchItem => searchItem.item)
                     .slice(0,10)
                     .map(p =>
-                    <div key={p.pokedex_number} className={"flex flex-row flex-nowrap justify-around"}>
+                    <div key={p.pokedex_number} className={"flex flex-row flex-nowrap justify-around text-sm"}>
                         <img src={p.sprite_url} alt={p.name} />
                         <div><span className={"align-middle mr-2 leading-[5rem]"}>{p.display_name}</span>
                         <span className={"mr-1 leading-[5rem] align-middle"}>{p.types[0]}</span>

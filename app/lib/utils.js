@@ -27,7 +27,7 @@ export const getRandomArrayElement = (ts) => {
 }
 
 export const pokemonToCategoryArray = (pokemon) => {
-    let ret = [...pokemon.types, pokemon.region]
+    let ret = [pokemon.name, ...pokemon.types, pokemon.region]
     if (pokemon.is_legendary || pokemon.is_mythical) ret.push("Legendary")
     if (pokemon.is_mega) ret.push("Mega")
     if (pokemon.is_fossil) ret.push("Fossil")
@@ -40,6 +40,20 @@ export const pokemonToCategoryArray = (pokemon) => {
     return ret
 }
 
+
 export const checkWinningPicks = (picks) => {
     if (picks.every(row => row.every(item => item!==null))) return true
+}
+
+export const areSetsEqual = (setA, setB) => {
+    if (setA.size !== setB.size) {
+        return false
+    }
+
+    for (const pokemon of setA) {
+        if (!setB.has(pokemon)) {
+            return false
+        }
+    }
+    return true
 }
