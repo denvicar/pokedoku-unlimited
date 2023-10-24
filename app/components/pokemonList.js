@@ -4,15 +4,15 @@ import {pokemonToCategoryArray} from "@/app/lib/utils";
 import Button from "@/app/components/button";
 
 export default function PokemonList({pokemons,types}) {
-    function filterPokemons(pList) {
-        return pList
+    function filterPokemons() {
+        return pokemons
             .filter(p => {
                 let pokemonCategoryArray = pokemonToCategoryArray(p)
                 return pokemonCategoryArray.includes(types[0]) && pokemonCategoryArray.includes(types[1]);
             })
     }
 
-    let displayedList = filterPokemons(pokemons)
+    let displayedList = filterPokemons()
     return <div>
         {types.length===2 &&
             displayedList
