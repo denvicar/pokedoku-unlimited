@@ -28,7 +28,8 @@ export const getRandomArrayElement = (ts) => {
 
 export const pokemonToCategoryArray = (pokemon) => {
     let ret = [pokemon.name, ...pokemon.types, pokemon.region]
-    if (pokemon.is_legendary || pokemon.is_mythical) ret.push("Legendary")
+    if (pokemon.is_legendary) ret.push("Legendary")
+    if (pokemon.is_mythical) ret.push("Mythical")
     if (pokemon.is_mega) ret.push("Mega")
     if (pokemon.is_fossil) ret.push("Fossil")
     if (pokemon.is_baby) ret.push("Baby")

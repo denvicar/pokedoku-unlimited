@@ -1,4 +1,4 @@
-const decodingArray = "abcdefghijklmnopqrstuvwxyz0123456789"
+const decodingArray = "abcdefghijklmnopqrstuvwxyz0123456789@"
 
 const types = [
     'fire',
@@ -40,7 +40,8 @@ const special = [
     'Evolved',
     'BaseForm',
     'Dual Type',
-    'Paradox'
+    'Paradox',
+    'Mythical'
 ]
 
 const SCHEMA_SIZE = 3
