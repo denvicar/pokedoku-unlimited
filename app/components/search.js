@@ -13,13 +13,13 @@ export default function Search({pokemons, handlePick}) {
     const fuse = new Fuse(pokemons,options)
 
 
-    return <div>
-        <input className={"bg-slate-200 placeholder-gray-800/75 dark:placeholder-gray-50/75 px-2 dark:bg-slate-800 rounded-full border border-slate-800 dark:border-slate-50 w-5/6 h-10 ml-1 hover:bg-slate-400 focus:bg-slate-400 dark:hover:bg-slate-600 dark:focus:bg-slate-600 focus:outline-none"} value={name} onChange={(e) => setName(e.target.value)} type="text"
+    return <div className={"h-fit"}>
+        <input className={"relative ml-[8%] bg-slate-200 placeholder-gray-800/75 dark:placeholder-gray-50/75 px-2 dark:bg-slate-800 rounded-full border border-slate-800 dark:border-slate-50 w-[84%] h-10 hover:bg-slate-400 focus:bg-slate-400 dark:hover:bg-slate-600 dark:focus:bg-slate-600 focus:outline-none"} value={name} onChange={(e) => setName(e.target.value)} type="text"
                placeholder="Start writing the pokemon name..."/>
 
 
 
-
+        <div hidden={name.trim()===''} className={"h-[40vh] overflow-y-scroll mt-5"}>
             {name.trim()!=='' &&
                 fuse.search(name)
                     .map(searchItem => searchItem.item)
@@ -30,8 +30,10 @@ export default function Search({pokemons, handlePick}) {
                         <div className={"flex-auto"}><span className={"align-middle mr-2 leading-[5rem]"}>{p.display_name}</span>
                         <span className={"mr-1 leading-[5rem] align-middle"}>{p.types[0]}</span>
                             {p.types.length >1 && <span className={"leading-[5rem] align-middle"}>{p.types[1]}</span>}</div>
-                        <div className={"mt-6 mr-1 w-1/6"}><button className={"w-[90%] disabled:bg-gray-500 bg-blue-200 dark:bg-blue-800 hover:bg-blue-500 rounded-full py-1 px-2 font-semibold"} onClick={() => handlePick(p)}>{"Pick"}</button></div>
+                        <div className={"mt-6 mr-1 w-1/6"}><button className={"w-[90%] disabled:bg-gray-500 bg-blue-200 dark:bg-blue-800 hover:bg-blue-500 rounded-full py-1 px-2 font-semibold"} onClick={() => {
+                            setName(""); handlePick(p)
+                        }}>{"Pick"}</button></div>
                     </div>)}
-
+        </div>
     </div>
 }
