@@ -26,11 +26,11 @@ export default function Search({pokemons, handlePick}) {
                     .slice(0,10)
                     .map(p =>
                     <div key={p.pokedex_number} className={"flex flex-row flex-nowrap justify-around text-[0.75rem] md:text-sm ml-2"}>
-                        <div className={"flex-none w-1/6"}><img className={" flex-none"} src={p.sprite_url} alt={p.name} /></div>
-                        <div className={"basis-2/3 flex-auto"}><span className={"align-middle mr-2 leading-[5rem]"}>{p.display_name}</span>
+                        <div className={"flex-none w-1/5"}><img className={" flex-none"} src={p.sprite_url} alt={p.name} /></div>
+                        <div className={"flex-auto"}><span className={"align-middle mr-2 leading-[5rem]"}>{p.display_name}</span>
                         <span className={"mr-1 leading-[5rem] align-middle"}>{p.types[0]}</span>
                             {p.types.length >1 && <span className={"leading-[5rem] align-middle"}>{p.types[1]}</span>}</div>
-                        <div className={"mt-6  flex-auto"}><Button handleClick={() => handlePick(p)} label={"Pick"} /></div>
+                        <div className={"mt-6 mr-1 w-1/6"}><button className={"w-[90%] disabled:bg-gray-500 bg-blue-200 dark:bg-blue-800 hover:bg-blue-500 rounded-full py-1 px-2 font-semibold"} onClick={() => handlePick(p)}>{"Pick"}</button></div>
                     </div>)}
 
     </div>
