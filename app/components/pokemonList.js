@@ -13,7 +13,7 @@ export default function PokemonList({pokemons,types}) {
     }
 
     let displayedList = filterPokemons()
-    return <div>
+    return <div className={"h-fit max-h-[60vh] overflow-y-scroll"}>
         {types.length===2 &&
             displayedList
                 .map(p =>

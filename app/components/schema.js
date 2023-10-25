@@ -8,6 +8,7 @@ import PokemonList from "@/app/components/pokemonList";
 import '../home.css'
 import {checkWinningPicks, pokemonToCategoryArray} from "@/app/lib/utils";
 import Button from "@/app/components/button";
+import Dialog from "@/app/components/dialog";
 
 export default function Schema({pokemons}) {
     let [show, setShow] = useState(false)
@@ -23,6 +24,7 @@ export default function Schema({pokemons}) {
     let [schemaCode,setSchemaCode] = useState("")
     let [insertingCode,setInsertingCode] = useState(false)
     let [inputCode,setInputCode] = useState("")
+    let [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
         let ignore = false;
@@ -68,14 +70,17 @@ export default function Schema({pokemons}) {
             setLastIndexes([rowIndex, colIndex])
             console.log("Picked cell with types ", types)
             setShow(true)
+            setShowModal(true)
         } else {
             console.log('Surrendered so showing solution')
             setSolutionTypes([schema[0][rowIndex],schema[1][colIndex]])
+            setShowModal(true)
         }
     }
 
     function handlePokemonPick(p) {
         setShow(false)
+        setShowModal(false)
         let pokemonCategoryArray = pokemonToCategoryArray(p)
 
         if (pokemonCategoryArray.includes(types[0]) && pokemonCategoryArray.includes(types[1])) {
@@ -107,6 +112,7 @@ export default function Schema({pokemons}) {
             setGuess('')
             setGuessColor('')
             setShow(false)
+            setShowModal(false)
         } else {
             handleRegenerate()
         }
@@ -116,6 +122,7 @@ export default function Schema({pokemons}) {
         setWin(false)
         setPicked(picked.map(row => row.map(col => null)))
         setShow(false)
+        setShowModal(false)
         setGuess('')
         setGuessColor('')
         setTypes([])
@@ -145,7 +152,13 @@ export default function Schema({pokemons}) {
     }
 
 
-    return schema && <div className={"flex flex-col flex-nowrap gap-3"}>
+    return schema && <div>
+        <Dialog handleClick={() => setShowModal(!showModal)} show={showModal && (!win && !surrender)}>
+            <div className={"text-center"}><span className={"font-bold text-lg"}>Guess</span> - <span className={"italic"}>{types[0]}/{types[1]}</span></div>
+            <Search pokemons={pokemons} handlePick={handlePokemonPick} />
+        </Dialog>
+
+        <div className={"flex flex-col flex-nowrap gap-3"}>
         {/*title*/}
         <h3 className={"text-2xl font-bold text-center"}>Pokedoku Unlimited - {schemaCode}</h3>
 
@@ -206,8 +219,14 @@ export default function Schema({pokemons}) {
         {/*</table>*/}
 
         {guess!=='' && <span className={"ml-2"} style={{color:guessColor}}>{guess}</span>}
-        {show && <Search pokemons={pokemons} handlePick={handlePokemonPick}/>}
-        <PokemonList pokemons={pokemons} types={solutionTypes} />
-    </div>
+        {/*{show && <Search pokemons={pokemons} handlePick={handlePokemonPick}/>}*/}
+        <Dialog handleClick={() => setShowModal(!showModal)} show={showModal && (win || surrender)}>
+            <div className={"text-center"}><span className={"font-bold text-lg"}>Solution</span> - <span className={"italic"}>{solutionTypes[0]}/{solutionTypes[1]}</span></div>
+
+            <PokemonList pokemons={pokemons} types={solutionTypes} />
+        </Dialog>
+
+
+        </div></div>
 }
 
