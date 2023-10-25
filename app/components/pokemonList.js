@@ -18,7 +18,7 @@ export default function PokemonList({pokemons,types}) {
             displayedList
                 .map(p =>
                     <div key={p.pokedex_number} className={"flex flex-row flex-nowrap justify-around"}>
-                        <img src={p.sprite_url} alt={p.name} />
+                        <div className={"w-1/5 flex-none"}><img src={p.sprite_url} alt={p.name} /></div>
                         <div><span className={"align-middle mr-2 leading-[5rem]"}>{p.display_name}</span>
                             <span className={"mr-1 leading-[5rem] align-middle"}>{p.types[0]}</span>
                             {p.types.length >1 && <span className={"leading-[5rem] align-middle"}>{p.types[1]}</span>}</div>

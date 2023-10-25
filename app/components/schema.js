@@ -93,9 +93,9 @@ export default function Schema({pokemons}) {
             return <div className={"hover:bg-orange-200 border h-full"} style={{backgroundColor: types[0]===schema[0][row]&& types[1]===schema[1][col] ? "coral":""}} onClick={() => handleTableClick(row, col)}></div>
         } else {
             if(!surrender && !win) {
-                return <div className={"h-full w-full border relative"} ><img src={picked[row][col].sprite_url} alt={picked[row][col].name} /><span className={"text-[0.7em] text-white absolute bottom-2 left-2 bg-black/70"}>{picked[row][col].display_name}</span></div>
+                return <div className={"h-full w-full border relative"} ><img src={picked[row][col].sprite_url} alt={picked[row][col].name} /><span className={"rounded-full px-2 text-[0.7em] text-white absolute bottom-2 left-2 bg-black/70"}>{picked[row][col].display_name}</span></div>
             } else {
-                return <div className={"h-full w-full border relative"} ><img src={picked[row][col].sprite_url} alt={picked[row][col].name} onClick={()=>handleTableClick(row,col)}/><span className={"text-[0.7em] text-white absolute bottom-2 left-2 bg-black/70"}>{picked[row][col].display_name}</span></div>
+                return <div className={"h-full w-full border relative"} ><img src={picked[row][col].sprite_url} alt={picked[row][col].name} onClick={()=>handleTableClick(row,col)}/><span className={"rounded-full px-2 text-[0.7em] text-white absolute bottom-2 left-2 bg-black/70"}>{picked[row][col].display_name}</span></div>
             }
         }
     }
