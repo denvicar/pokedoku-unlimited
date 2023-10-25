@@ -1,26 +1,3 @@
-const paradox_pokemons = [
-    'great-tusk',
-    'scream-tail',
-    'brute-bonnet',
-    'flutter-mane',
-    'slither-wing',
-    'sandy-shocks',
-    'roaring-moon',
-    'koraidon',
-    'walking-wake',
-    'raging-bolt',
-    'iron-treads',
-    'iron-bundle',
-    'iron-hands',
-    'iron-jugulis',
-    'iron-moth',
-    'iron-thorns',
-    'iron-valiant',
-    'miraidon',
-    'iron-leaves',
-    'iron-crown'
-]
-
 export const getRandomArrayElement = (ts) => {
     let i = Math.floor(Math.random()*ts.length)
     return ts[i]
@@ -37,7 +14,7 @@ export const pokemonToCategoryArray = (pokemon) => {
     else ret.push("Evolved")
     if (pokemon.types.length===1) ret.push("Monotype")
     else ret.push("Dual Type")
-    if (paradox_pokemons.includes(pokemon.name)) ret.push("Paradox")
+    if (pokemon.is_paradox) ret.push("Paradox")
     return ret
 }
 
