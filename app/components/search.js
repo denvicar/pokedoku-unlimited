@@ -25,12 +25,12 @@ export default function Search({pokemons, handlePick}) {
                     .map(searchItem => searchItem.item)
                     .slice(0,10)
                     .map(p =>
-                    <div key={p.pokedex_number} className={"flex flex-row flex-nowrap justify-around text-sm"}>
-                        <img src={p.sprite_url} alt={p.name} />
-                        <div><span className={"align-middle mr-2 leading-[5rem]"}>{p.display_name}</span>
+                    <div key={p.pokedex_number} className={"flex flex-row flex-nowrap justify-around text-[0.75rem] md:text-sm ml-2"}>
+                        <div className={"flex-none w-1/6"}><img className={" flex-none"} src={p.sprite_url} alt={p.name} /></div>
+                        <div className={"basis-2/3 flex-auto"}><span className={"align-middle mr-2 leading-[5rem]"}>{p.display_name}</span>
                         <span className={"mr-1 leading-[5rem] align-middle"}>{p.types[0]}</span>
                             {p.types.length >1 && <span className={"leading-[5rem] align-middle"}>{p.types[1]}</span>}</div>
-                        <div className={"mt-6"}><Button handleClick={() => handlePick(p)} label={"Pick"} /></div>
+                        <div className={"mt-6  flex-auto"}><Button handleClick={() => handlePick(p)} label={"Pick"} /></div>
                     </div>)}
 
     </div>
