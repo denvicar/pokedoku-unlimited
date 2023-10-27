@@ -1,5 +1,5 @@
 'use client'
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 
 import Search from "@/app/components/search";
 import {SCHEMA_SIZE, types as constTypes} from "@/app/lib/constants";
@@ -12,26 +12,21 @@ import Dialog from "@/app/components/dialog";
 
 export default function Schema({pokemons}) {
     const searchInput = useRef(null)
+
     const [picked, setPicked] = useState()
     const [schema, setSchema] = useState()
     const [pickedTypesIndexes, setPickedTypesIndexes] = useState({})
-
-    const pickedTypes = schema ? {row: schema[0][pickedTypesIndexes.row], col: schema[1][pickedTypesIndexes.col]} : {}
-    const schemaCode = schema ? buildSchemaCode(schema) : ""
-
-    // unica variabile di stato per guess e guesscolor
-    const [guess, setGuess] = useState('')
-    const [guessColor, setGuessColor] = useState('')
-
+    const [correct, setCorrect] = useState(null)
     const [surrender, setSurrender] = useState(false)
-
-    // deducibile dai pick
-    const [win, setWin] = useState(false)
-
     const [insertingCode, setInsertingCode] = useState(false)
     const [inputCode, setInputCode] = useState("")
-
     const [showModal, setShowModal] = useState(false)
+
+    const pickedTypes = schema ? {row: schema[0][pickedTypesIndexes.row], col: schema[1][pickedTypesIndexes.col]} : {}
+    const schemaCode = useMemo(() => buildSchemaCode(schema), [schema])
+    const guess = correct ? 'Correct guess!' : 'Wrong guess!'
+    const guessColor = correct ? 'green' : 'red'
+    const win = useMemo(() => checkWinningPicks(picked), [picked])
 
     useEffect(() => {
         let ignore = false
@@ -49,7 +44,6 @@ export default function Schema({pokemons}) {
             }
             setSchema(loadedSchema)
             setPicked(loadedPicks)
-            if (checkWinningPicks(loadedPicks)) setWin(true)
         }
         return () => {ignore = true}
     }, [pokemons]);
@@ -59,18 +53,14 @@ export default function Schema({pokemons}) {
     }, [showModal]);
 
 
-
-
     function updatePicks(p) {
         let newPicked = picked.map((row, i) => i !== pickedTypesIndexes.row ? row : row.map((col, j) => j !== pickedTypesIndexes.col ? col : p))
         setPicked(newPicked)
-        if (checkWinningPicks(newPicked)) setWin(true)
         localStorage.setItem("picks", JSON.stringify(newPicked))
     }
 
     function handleTableClick(rowIndex, colIndex) {
-        setGuessColor('')
-        setGuess('')
+        setCorrect(null)
         setShowModal(true)
         setPickedTypesIndexes({row: rowIndex, col: colIndex})
     }
@@ -81,11 +71,9 @@ export default function Schema({pokemons}) {
 
         if (pokemonCategoryArray.includes(pickedTypes.row) && pokemonCategoryArray.includes(pickedTypes.col)) {
             updatePicks(p)
-            setGuessColor("green")
-            setGuess("Correct guess!")
+            setCorrect(true)
         } else {
-            setGuessColor("red")
-            setGuess("Wrong guess!")
+            setCorrect(false)
         }
     }
 
@@ -114,10 +102,8 @@ export default function Schema({pokemons}) {
 
     function handleSurrender() {
         if (!surrender) {
-            setWin(false)
             setSurrender(true)
-            setGuess('')
-            setGuessColor('')
+            setCorrect(null)
             setShowModal(false)
         } else {
             handleRegenerate()
@@ -125,11 +111,9 @@ export default function Schema({pokemons}) {
     }
 
     function handleRegenerate() {
-        setWin(false)
         setPicked(picked.map(row => row.map(() => null)))
         setShowModal(false)
-        setGuess('')
-        setGuessColor('')
+        setCorrect(null)
         setPickedTypesIndexes({})
         setSurrender(false)
         setInsertingCode(false)
@@ -151,13 +135,10 @@ export default function Schema({pokemons}) {
         }
     }
 
-
-
-
     return schema && <div>
         <Dialog handleClick={() => setShowModal(!showModal)} show={showModal && (!win && !surrender)}>
             <div className={"text-center"}><span className={"font-bold text-lg"}>Guess</span> - <span
-                className={"italic"}>{pickedTypes.row}/{pickedTypes.col}</span></div>
+                className={"italic capitalize"}>{pickedTypes.row}/{pickedTypes.col}</span></div>
             <Search inputRef={searchInput} pokemons={pokemons} handlePick={handlePokemonPick}/>
         </Dialog>
 
@@ -205,10 +186,10 @@ export default function Schema({pokemons}) {
 
             </div>
 
-            {guess !== '' && <span className={"ml-2"} style={{color: guessColor}}>{guess}</span>}
+            {correct !== null && <span className={"ml-2"} style={{color: guessColor}}>{guess}</span>}
             <Dialog handleClick={() => setShowModal(!showModal)} show={showModal && (win || surrender)}>
                 <div className={"text-center"}><span className={"font-bold text-lg"}>Solution</span> - <span
-                    className={"italic"}>{pickedTypes.row}/{pickedTypes.col}</span></div>
+                    className={"italic capitalize"}>{pickedTypes.row}/{pickedTypes.col}</span></div>
 
                 <PokemonList pokemons={pokemons} types={[pickedTypes.row, pickedTypes.col]}/>
             </Dialog>

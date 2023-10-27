@@ -4,8 +4,6 @@ import Button from "@/app/components/button";
 import Fuse from 'fuse.js'
 
 export default function Search({pokemons, inputRef, handlePick}) {
-
-
     let [name, setName] = useState("")
     const options = {
         includeScore: false,
