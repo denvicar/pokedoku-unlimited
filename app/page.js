@@ -10,9 +10,7 @@ export default async function Home() {
     const pokemons = Array.from(new Map(Object.entries(json['data']['pokemons'])).values())
 
     return (
-        <main>
             <Schema pokemons={pokemons}/>
-        </main>
     )
 }
 
