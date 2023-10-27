@@ -85,6 +85,7 @@ const buildSchema = (pokemons) => {
 
 const buildSchemaCode = (schema) => {
     let ret = ""
+    if (!schema) return ret
     for (let row of schema) {
         for (let col of row) {
             let index = categories.indexOf(col)
