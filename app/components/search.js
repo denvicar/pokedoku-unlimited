@@ -1,9 +1,10 @@
 'use client'
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Button from "@/app/components/button";
 import Fuse from 'fuse.js'
 
-export default function Search({pokemons, handlePick}) {
+export default function Search({pokemons, inputRef, handlePick}) {
+
 
     let [name, setName] = useState("")
     const options = {
@@ -14,7 +15,7 @@ export default function Search({pokemons, handlePick}) {
 
 
     return <div className={"h-fit"}>
-        <input className={"relative ml-[8%] bg-slate-200 placeholder-gray-800/75 dark:placeholder-gray-50/75 px-2 dark:bg-slate-800 rounded-full border border-slate-800 dark:border-slate-50 w-[84%] h-10 hover:bg-slate-400 focus:bg-slate-400 dark:hover:bg-slate-600 dark:focus:bg-slate-600 focus:outline-none"} value={name} onChange={(e) => setName(e.target.value)} type="text"
+        <input ref={inputRef} className={"relative ml-[8%] bg-slate-200 placeholder-gray-800/75 dark:placeholder-gray-50/75 px-2 dark:bg-slate-800 rounded-full border border-slate-800 dark:border-slate-50 w-[84%] h-10 hover:bg-slate-400 focus:bg-slate-400 dark:hover:bg-slate-600 dark:focus:bg-slate-600 focus:outline-none"} value={name} onChange={(e) => setName(e.target.value)} type="text"
                placeholder="Start writing the pokemon name..."/>
 
 

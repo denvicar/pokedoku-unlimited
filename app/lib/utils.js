@@ -20,7 +20,7 @@ export const pokemonToCategoryArray = (pokemon) => {
 
 
 export const checkWinningPicks = (picks) => {
-    if (picks.every(row => row.every(item => item!==null))) return true
+    if (picks && picks.every(row => row.every(item => item!==null))) return true
 }
 
 export const areSetsEqual = (setA, setB) => {
