@@ -1,14 +1,25 @@
 'use client'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {regions} from "@/app/lib/constants";
 import {getRandomArrayElement} from "@/app/lib/utils";
 import Button from "@/app/components/button";
 
 export default function RegionQuiz({pokemons}) {
-    let [score, setScore] = useState(0)
-    let [error, setError] = useState(null)
-    let [disabled, setDisabled] = useState([...regions,"Hisui"].map(r=>false))
-    let [current, setCurrent] = useState(getRandomArrayElement(pokemons))
+    const [score, setScore] = useState(0)
+    const [error, setError] = useState(null)
+    const [disabled, setDisabled] = useState([...regions,"Hisui"].map(r=>false))
+    const [current, setCurrent] = useState(getRandomArrayElement(pokemons))
+    const [image, setImage] = useState()
+
+    useEffect(() => {
+        let ignore = false;
+        if (!ignore) {
+            let loadedArt = 'sprite_url'
+            if (localStorage.getItem("defaultArt")) loadedArt = localStorage.getItem("defaultArt")
+            setImage(loadedArt)
+        }
+        return () => {ignore = true}
+    }, []);
 
     function handleClick(r,i) {
         if (current.region === r) {
@@ -23,10 +34,18 @@ export default function RegionQuiz({pokemons}) {
         }
     }
 
+    function handleSwitchClick() {
+        let art = ""
+        if (image === 'sprite_url') art = 'artwork_url'
+        else art = 'sprite_url'
+        setImage(art)
+        localStorage.setItem("defaultArt",art)
+    }
+
     return <div className={"flex flex-col flex-nowrap gap-2 px-2"}>
         <h1 className={"font-bold text-2xl mt-2"}>Guess the region</h1>
-        <h2 className={"font-semibold text-xl"}>Score: {score}</h2>
-        <img className={"w-3/6"} src={current.sprite_url} alt={current.name}/>
+        <div className={"flex flex-row gap-5 h-8"}><h2 className={"font-semibold text-xl"}>Score: {score}</h2> <Button handleClick={() => handleSwitchClick()} label={image === 'sprite_url' ? 'Switch to art' : 'Switch to sprite'} /></div>
+        <img className={"w-3/6"} src={current[image]} alt={current.name}/>
         <h3 className={"text-lg"}>{current.display_name}</h3>
         {error !== null && <span style={{color:"red"}}>{error}</span>}
         <div className={"flex flex-row flex-wrap place-content-stretch"}>
