@@ -20,10 +20,10 @@ export default function RootLayout({children}) {
         <body className={inter.className}>
         <nav className={"flex flex-row gap-4 dark:bg-slate-900 bg-slate-200"}>
             <div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/">Pokedoku</Link></div>
-            <div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/regionquiz/">Region quiz</Link></div>
-            <div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/typequiz/">Type quiz</Link></div>
-            <div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/namequiz/">Name quiz</Link></div>
-            {/*<div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/search/">Search</Link></div>*/}
+            <div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/regionquiz/">Regions</Link></div>
+            <div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/typequiz/">Types</Link></div>
+            <div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/namequiz/">Names</Link></div>
+            <div className={"rounded-full dark:text-slate-900 p-1  text-slate-200 bg"}><Link href="/search/">Search</Link></div>
         </nav>
 
         <main className={"md:w-1/2 lg:w-1/3"}>{children}</main>
