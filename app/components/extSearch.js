@@ -1,7 +1,6 @@
 'use client'
 import {useState} from "react";
 import {pokemonToCategoryArray} from "@/app/lib/utils";
-import PokemonList from "@/app/components/pokemonList";
 
 export default function ExtendedSearch({pokemons}) {
     let [params,setParams] = useState("")
@@ -27,7 +26,8 @@ export default function ExtendedSearch({pokemons}) {
                             <div className={"w-1/5"}><img src={p.sprite_url} alt={p.name} /></div>
                             <div><span className={"align-middle mr-2 leading-[5rem]"}>{p.display_name}</span>
                                 <span className={"mr-1 leading-[5rem] align-middle"}>{p.types[0]}</span>
-                                {p.types.length >1 && <span className={"leading-[5rem] align-middle"}>{p.types[1]}</span>}</div>
+                                {p.types.length >1 && <span className={"leading-[5rem] align-middle mr-1"}>{p.types[1]}</span>}
+                                <span className={"leading-[5rem] align-middle mr-1"}>{p.region}</span></div>
                         </div>)}
 
         </div>
