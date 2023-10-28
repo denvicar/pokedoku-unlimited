@@ -3,7 +3,7 @@ import {useEffect, useRef, useState} from "react";
 import Button from "@/app/components/button";
 import Fuse from 'fuse.js'
 
-export default function Search({pokemons, inputRef, handlePick}) {
+export default function Search({pokemons, inputRef, handlePick, imageToShow}) {
     let [name, setName] = useState("")
     const options = {
         includeScore: false,
@@ -25,7 +25,7 @@ export default function Search({pokemons, inputRef, handlePick}) {
                     .slice(0,10)
                     .map(p =>
                     <div key={p.pokedex_number} className={"flex flex-row flex-nowrap justify-around text-[0.75rem] md:text-sm ml-2"}>
-                        <div className={"flex-none w-1/5"}><img className={" flex-none"} src={p.sprite_url} alt={p.name} /></div>
+                        <div className={"flex-none w-1/5 md:w-[8%]"}><img className={" flex-none"} src={p[imageToShow]} alt={p.name} /></div>
                         <div className={"flex-auto"}><span className={"align-middle mr-2 leading-[5rem]"}>{p.display_name}</span>
                         <span className={"mr-1 leading-[5rem] align-middle"}>{p.types[0]}</span>
                             {p.types.length >1 && <span className={"leading-[5rem] align-middle"}>{p.types[1]}</span>}</div>

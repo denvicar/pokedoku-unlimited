@@ -21,6 +21,7 @@ export default function Schema({pokemons}) {
     const [insertingCode, setInsertingCode] = useState(false)
     const [inputCode, setInputCode] = useState("")
     const [showModal, setShowModal] = useState(false)
+    const [imageToShow, setImageToShow] = useState()
 
     const pickedTypes = schema ? {row: schema[0][pickedTypesIndexes.row], col: schema[1][pickedTypesIndexes.col]} : {}
     const schemaCode = useMemo(() => buildSchemaCode(schema), [schema])
@@ -33,6 +34,7 @@ export default function Schema({pokemons}) {
         if (!ignore) {
             let loadedSchema = [[null, null, null], [null, null, null]]
             let loadedPicks = Array.from({length: SCHEMA_SIZE}, () => Array.from({length: SCHEMA_SIZE}, () => null))
+            let loadedImages = "sprite_url"
             if (localStorage.getItem("schema")) {
                 loadedSchema = JSON.parse(localStorage.getItem("schema"))
             } else {
@@ -42,8 +44,10 @@ export default function Schema({pokemons}) {
             if (localStorage.getItem("picks")) {
                 loadedPicks = JSON.parse(localStorage.getItem("picks"))
             }
+            if (localStorage.getItem("defaultArt")) loadedImages = localStorage.getItem("defaultArt")
             setSchema(loadedSchema)
             setPicked(loadedPicks)
+            setImageToShow(loadedImages)
         }
         return () => {ignore = true}
     }, [pokemons]);
@@ -87,13 +91,13 @@ export default function Schema({pokemons}) {
         } else {
             if (!surrender && !win) {
                 // eslint-disable-next-line @next/next/no-img-element
-                return <div className={"h-full w-full border relative"}><img src={picked[row][col].sprite_url}
+                return <div className={"h-full w-full border relative"}><img src={picked[row][col][imageToShow]}
                                                                              alt={picked[row][col].name}/><span
                     className={"rounded-full px-2 text-[0.7em] text-white absolute bottom-2 left-2 bg-black/70"}>{picked[row][col].display_name}</span>
                 </div>
             } else {
                 // eslint-disable-next-line @next/next/no-img-element
-                return <div className={"h-full w-full border relative"}><img src={picked[row][col].sprite_url}
+                return <div className={"h-full w-full border relative"}><img src={picked[row][col][imageToShow]}
                                                                              alt={picked[row][col].name}
                                                                              onClick={() => handleTableClick(row, col)}/><span
                     className={"rounded-full px-2 text-[0.7em] text-white absolute bottom-2 left-2 bg-black/70"}>{picked[row][col].display_name}</span>
@@ -137,11 +141,26 @@ export default function Schema({pokemons}) {
         }
     }
 
+    function handleSwitchClick() {
+        let art = ""
+        if (imageToShow === 'sprite_url') art = 'artwork_url'
+        else art = 'sprite_url'
+        setImageToShow(art)
+        localStorage.setItem("defaultArt",art)
+    }
+
     return schema && <div>
         <Dialog handleClick={() => setShowModal(!showModal)} show={showModal && (!win && !surrender)}>
             <div className={"text-center"}><span className={"font-bold text-lg"}>Guess</span> - <span
                 className={"italic capitalize"}>{pickedTypes.row}/{pickedTypes.col}</span></div>
-            {showModal && <Search inputRef={searchInput} pokemons={pokemons} handlePick={handlePokemonPick}/>}
+            {showModal && <Search imageToShow={imageToShow} inputRef={searchInput} pokemons={pokemons} handlePick={handlePokemonPick}/>}
+        </Dialog>
+
+        <Dialog handleClick={() => setShowModal(!showModal)} show={showModal && (win || surrender)}>
+            <div className={"text-center"}><span className={"font-bold text-lg"}>Solution</span> - <span
+                className={"italic capitalize"}>{pickedTypes.row}/{pickedTypes.col}</span></div>
+
+            {showModal && <PokemonList imageToShow={imageToShow} pokemons={pokemons} types={[pickedTypes.row, pickedTypes.col]}/>}
         </Dialog>
 
         <div className={"flex flex-col flex-nowrap gap-3"}>
@@ -187,14 +206,10 @@ export default function Schema({pokemons}) {
                 })}
 
             </div>
+            <Button handleClick={() => handleSwitchClick()} label={imageToShow === 'sprite_url' ? 'Switch to art' : 'Switch to sprite'} />
 
             {correct !== null && <span className={"ml-2"} style={{color: guessColor}}>{guess}</span>}
-            <Dialog handleClick={() => setShowModal(!showModal)} show={showModal && (win || surrender)}>
-                <div className={"text-center"}><span className={"font-bold text-lg"}>Solution</span> - <span
-                    className={"italic capitalize"}>{pickedTypes.row}/{pickedTypes.col}</span></div>
 
-                <PokemonList pokemons={pokemons} types={[pickedTypes.row, pickedTypes.col]}/>
-            </Dialog>
 
 
         </div>
