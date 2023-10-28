@@ -22,6 +22,7 @@ export default function RootLayout({children}) {
             <div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/">Pokedoku</Link></div>
             <div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/regionquiz/">Region quiz</Link></div>
             <div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/typequiz/">Type quiz</Link></div>
+            <div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/namequiz/">Name quiz</Link></div>
             {/*<div className={"hover:bg-slate-400 dark:hover:bg-slate-600 rounded-full p-1"}><Link href="/search/">Search</Link></div>*/}
         </nav>
 
