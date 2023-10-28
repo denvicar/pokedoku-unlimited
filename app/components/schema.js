@@ -49,7 +49,9 @@ export default function Schema({pokemons}) {
     }, [pokemons]);
 
     useEffect(() => {
-        if(showModal) searchInput.current.focus()
+        if(showModal) {
+            searchInput.current.focus()
+        }
     }, [showModal]);
 
 
@@ -139,7 +141,7 @@ export default function Schema({pokemons}) {
         <Dialog handleClick={() => setShowModal(!showModal)} show={showModal && (!win && !surrender)}>
             <div className={"text-center"}><span className={"font-bold text-lg"}>Guess</span> - <span
                 className={"italic capitalize"}>{pickedTypes.row}/{pickedTypes.col}</span></div>
-            <Search inputRef={searchInput} pokemons={pokemons} handlePick={handlePokemonPick}/>
+            {showModal && <Search inputRef={searchInput} pokemons={pokemons} handlePick={handlePokemonPick}/>}
         </Dialog>
 
         <div className={"flex flex-col flex-nowrap gap-3"}>
