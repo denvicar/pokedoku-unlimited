@@ -1,14 +1,26 @@
 'use client'
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {regions} from "@/app/lib/constants";
 import {getRandomArrayElement, shuffleArray} from "@/app/lib/utils";
 import Fuse from "fuse.js";
+import Button from "@/app/components/button";
 
 export default function NameQuiz({pokemons}) {
     let [score, setScore] = useState(0)
     let [error, setError] = useState(null)
     let [disabled, setDisabled] = useState([null,null,null,null].map(r=>false))
     let [current, setCurrent] = useState(getRandomArrayElement(pokemons))
+    let [image, setImage] = useState()
+
+    useEffect(() => {
+        let ignore = false;
+        if (!ignore) {
+            let loadedArt = 'sprite_url'
+            if (localStorage.getItem("defaultArt")) loadedArt = localStorage.getItem("defaultArt")
+            setImage(loadedArt)
+        }
+        return () => {ignore = true}
+    }, []);
 
     const options = {
         includeScore: false,
@@ -45,10 +57,18 @@ export default function NameQuiz({pokemons}) {
         }
     }
 
+    function handleSwitchClick() {
+        let art = ""
+        if (image === 'sprite_url') art = 'artwork_url'
+        else art = 'sprite_url'
+        setImage(art)
+        localStorage.setItem("defaultArt",art)
+    }
+
     return <div className={"flex flex-col flex-nowrap gap-2 px-2"}>
         <h1 className={"font-bold text-2xl mt-2"}>Guess the name</h1>
-        <h2 className={"font-semibold text-xl"}>Score: {score}</h2>
-        <img className={"w-3/6"} src={current.sprite_url} alt={current.pokedex_number}/>
+        <div className={"flex flex-row gap-5 h-8"}><h2 className={"font-semibold text-xl"}>Score: {score}</h2> <Button handleClick={() => handleSwitchClick()} label={image === 'sprite_url' ? 'Switch to art' : 'Switch to sprite'} /></div>
+        <img className={"w-3/6"} src={current[image]} alt={current.pokedex_number}/>
         {/*<h3 className={"text-lg"}>{current.display_name}</h3>*/}
         {error !== null && <span style={{color:"red"}}>{error}</span>}
         <div className={"flex flex-row flex-wrap place-content-stretch"}>
