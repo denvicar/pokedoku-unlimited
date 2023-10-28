@@ -24,12 +24,12 @@ export default function Search({pokemons, inputRef, handlePick, imageToShow}) {
                     .map(searchItem => searchItem.item)
                     .slice(0,10)
                     .map(p =>
-                    <div key={p.pokedex_number} className={"flex flex-row flex-nowrap justify-around text-[0.75rem] md:text-sm ml-2"}>
+                    <div key={p.pokedex_number} className={"flex flex-row flex-nowrap gap-0 text-[0.75rem] md:text-sm ml-2"}>
                         <div className={"flex-none w-1/5 md:w-[8%]"}><img className={" flex-none"} src={p[imageToShow]} alt={p.name} /></div>
-                        <div className={"flex-auto"}><span className={"align-middle mr-2 leading-[5rem]"}>{p.display_name}</span>
-                        <span className={"mr-1 leading-[5rem] align-middle"}>{p.types[0]}</span>
-                            {p.types.length >1 && <span className={"leading-[5rem] align-middle"}>{p.types[1]}</span>}</div>
-                        <div className={"mt-6 mr-1 w-1/6"}><button className={"w-[90%] disabled:bg-gray-500 bg-blue-200 dark:bg-blue-800 hover:bg-blue-500 rounded-full py-1 px-2 font-semibold"} onClick={() => {
+                        <div className={"flex-auto mt-6"}><span className={"align-middle mr-2"}>{p.display_name}</span>
+                        <span className={"mr-1 align-middle"}>{p.types[0]}</span>
+                            {p.types.length >1 && <span className={" align-middle"}>{p.types[1]}</span>}</div>
+                        <div className={"mt-5 mr-1 w-1/5 flex-none"}><button className={"w-[90%] h-8 disabled:bg-gray-500 bg-blue-200 dark:bg-blue-800 hover:bg-blue-500 rounded-full py-1 px-2 font-semibold"} onClick={() => {
                             setName(""); handlePick(p)
                         }}>{"Pick"}</button></div>
                     </div>)}
