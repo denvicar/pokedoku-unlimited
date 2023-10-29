@@ -112,7 +112,14 @@ export default function Schema({pokemons}) {
             setCorrect(null)
             setShowModal(false)
         } else {
-            handleRegenerate()
+            setPicked(picked.map(row => row.map(() => null)))
+            setShowModal(false)
+            setCorrect(null)
+            setPickedTypesIndexes({})
+            setSurrender(false)
+            setInsertingCode(false)
+            setInputCode("")
+            localStorage.removeItem("picks")
         }
     }
 
