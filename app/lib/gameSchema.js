@@ -121,6 +121,7 @@ const buildSchemaCode = (schema) => {
 }
 
 const decodeSchemaCode = (code) => {
+    if (code.trim().length > 6) return decodeHardSchemaCode(code)
     code = code.trim().substring(0,6).toLowerCase()
     let rows = []
     let cols = []
@@ -134,6 +135,25 @@ const decodeSchemaCode = (code) => {
         }
     }
     return [[...rows],[...cols]]
+}
+
+const decodeHardSchemaCode = (code) => {
+    code = code.trim().substring(0,9).toLowerCase()
+    let rows = []
+    let cols = []
+    let third = []
+    for (let i = 0; i< code.length; i++) {
+        let index = decodingArray.indexOf(code.charAt(i))
+
+        if (i<3) {
+            rows.push(categories[index])
+        } else if (i>=3 && i<6) {
+            cols.push(categories[index])
+        } else {
+            third.push(categories[index])
+        }
+    }
+    return [rows,cols,third]
 }
 
 const getAvailableCategoriesByRows = (rows, pokemonCategoryArray, availableCategories) => {
