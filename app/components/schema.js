@@ -3,12 +3,13 @@ import {useEffect, useMemo, useRef, useState} from "react";
 
 import Search from "@/app/components/search";
 import {SCHEMA_SIZE, types as constTypes} from "@/app/lib/constants";
-import {buildSchema, buildSchemaCode, decodeSchemaCode} from "@/app/lib/gameSchema";
+import {buildHardSchema, buildSchema, buildSchemaCode, decodeSchemaCode} from "@/app/lib/gameSchema.js";
 import PokemonList from "@/app/components/pokemonList";
 import '../home.css'
 import {checkWinningPicks, pokemonToCategoryArray} from "@/app/lib/utils";
 import Button from "@/app/components/button";
 import Dialog from "@/app/components/dialog";
+import {pick} from "next/dist/lib/pick";
 
 export default function Schema({pokemons}) {
     const searchInput = useRef(null)
@@ -22,12 +23,14 @@ export default function Schema({pokemons}) {
     const [inputCode, setInputCode] = useState("")
     const [showModal, setShowModal] = useState(false)
     const [imageToShow, setImageToShow] = useState()
+    const [mode, setMode] = useState('Normal')
 
-    const pickedTypes = schema ? {row: schema[0][pickedTypesIndexes.row], col: schema[1][pickedTypesIndexes.col]} : {}
+    const pickedTypes = schema ? {row: schema[0][pickedTypesIndexes.row], col: schema[1][pickedTypesIndexes.col], third: schema[schema.length-1][pickedTypesIndexes.col]} : {}
     const schemaCode = useMemo(() => buildSchemaCode(schema), [schema])
     const guess = correct ? 'Correct guess!' : 'Wrong guess!'
     const guessColor = correct ? 'green' : 'red'
     const win = useMemo(() => checkWinningPicks(picked), [picked])
+    const isHard = mode === 'Hard'
 
     useEffect(() => {
         let ignore = false
@@ -48,6 +51,7 @@ export default function Schema({pokemons}) {
             setSchema(loadedSchema)
             setPicked(loadedPicks)
             setImageToShow(loadedImages)
+            setMode(loadedSchema.length === 2 ? 'Normal' : 'Hard')
         }
         return () => {ignore = true}
     }, [pokemons]);
@@ -58,6 +62,13 @@ export default function Schema({pokemons}) {
         }
     }, [showModal]);
 
+    function getNewSchema(schemaFunction) {
+        let s = schemaFunction(pokemons)
+        console.log(s)
+        setSchema(s)
+        localStorage.setItem("schema",JSON.stringify(s))
+        localStorage.removeItem("picks")
+    }
 
     function updatePicks(p) {
         let newPicked = picked.map((row, i) => i !== pickedTypesIndexes.row ? row : row.map((col, j) => j !== pickedTypesIndexes.col ? col : p))
@@ -75,7 +86,7 @@ export default function Schema({pokemons}) {
         setShowModal(false)
         let pokemonCategoryArray = pokemonToCategoryArray(p)
 
-        if (pokemonCategoryArray.includes(pickedTypes.row) && pokemonCategoryArray.includes(pickedTypes.col)) {
+        if (pokemonCategoryArray.includes(pickedTypes.row) && pokemonCategoryArray.includes(pickedTypes.col) && pokemonCategoryArray.includes(pickedTypes.third)) {
             updatePicks(p)
             setCorrect(true)
         } else {
@@ -131,10 +142,7 @@ export default function Schema({pokemons}) {
         setSurrender(false)
         setInsertingCode(false)
         setInputCode("")
-        let s = buildSchema(pokemons)
-        setSchema(s)
-        localStorage.setItem("schema", JSON.stringify(s))
-        localStorage.removeItem("picks")
+        getNewSchema(isHard ? buildHardSchema : buildSchema)
     }
 
     function handleInsertCode(inputText) {
@@ -156,18 +164,28 @@ export default function Schema({pokemons}) {
         localStorage.setItem("defaultArt",art)
     }
 
+    function handleModeChange() {
+        if (isHard) {
+            setMode('Normal')
+            getNewSchema(buildHardSchema)
+        } else {
+            setMode('Hard')
+            getNewSchema(buildSchema)
+        }
+    }
+
     return schema && <div>
         <Dialog handleClick={() => setShowModal(!showModal)} show={showModal && (!win && !surrender)}>
             <div className={"text-center"}><span className={"font-bold text-lg"}>Guess</span> - <span
-                className={"italic capitalize"}>{pickedTypes.row}/{pickedTypes.col}</span></div>
+                className={"italic capitalize"}>{pickedTypes.row}/{pickedTypes.col}{isHard && "/"+ pickedTypes.third}</span></div>
             {showModal && <Search imageToShow={imageToShow} inputRef={searchInput} pokemons={pokemons} handlePick={handlePokemonPick}/>}
         </Dialog>
 
         <Dialog handleClick={() => setShowModal(!showModal)} show={showModal && (win || surrender)}>
             <div className={"text-center"}><span className={"font-bold text-lg"}>Solution</span> - <span
-                className={"italic capitalize"}>{pickedTypes.row}/{pickedTypes.col}</span></div>
+                className={"italic capitalize"}>{pickedTypes.row}/{pickedTypes.col}{isHard && "/"+ pickedTypes.third}</span></div>
 
-            {showModal && <PokemonList imageToShow={imageToShow} pokemons={pokemons} types={[pickedTypes.row, pickedTypes.col]}/>}
+            {showModal && <PokemonList imageToShow={imageToShow} pokemons={pokemons} types={[pickedTypes.row, pickedTypes.col, pickedTypes.third]}/>}
         </Dialog>
 
         <div className={"flex flex-col flex-nowrap gap-3"}>
@@ -211,9 +229,17 @@ export default function Schema({pokemons}) {
                         </div>
                     </div>
                 })}
+                {schema.length > 2 && <div className={"flex flex-row flex-nowrap justify-end"}>
+                    <div className={"w-1/4"}></div>
+                    {schema[2].map(t => <div className={"w-1/4 flex-none text-center"} key={t}>{constTypes.includes(t) ?
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img className={"w-5/6 m-auto"} src={t + ".png"} alt={t}/> : <span
+                            className={"font-semibold uppercase font-poke text-[0.6rem] text-center align-middle break-words leading-[3rem] m-auto"}>{t}</span>}</div>)}
+                </div>}
 
             </div>
             <Button handleClick={() => handleSwitchClick()} label={imageToShow === 'sprite_url' ? 'Switch to art' : 'Switch to sprite'} />
+            <Button handleClick={() => handleModeChange()} label={isHard ? 'Switch to Normal' : 'Switch to Hard'} />
 
             {correct !== null && <span className={"ml-2"} style={{color: guessColor}}>{guess}</span>}
 

@@ -1,9 +1,9 @@
-export const getRandomArrayElement = (ts) => {
+ const getRandomArrayElement = (ts) => {
     let i = Math.floor(Math.random()*ts.length)
     return ts[i]
 }
 
-export const pokemonToCategoryArray = (pokemon) => {
+ const pokemonToCategoryArray = (pokemon) => {
     let ret = [pokemon.name, ...pokemon.types, pokemon.region]
     if (pokemon.is_legendary) ret.push("Legendary")
     if (pokemon.is_mythical) ret.push("Mythical")
@@ -19,11 +19,11 @@ export const pokemonToCategoryArray = (pokemon) => {
 }
 
 
-export const checkWinningPicks = (picks) => {
+ const checkWinningPicks = (picks) => {
     if (picks && picks.every(row => row.every(item => item!==null))) return true
 }
 
-export const areSetsEqual = (setA, setB) => {
+ const areSetsEqual = (setA, setB) => {
     if (setA.size !== setB.size) {
         return false
     }
@@ -36,9 +36,11 @@ export const areSetsEqual = (setA, setB) => {
     return true
 }
 
-export function shuffleArray(array) {
+ function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
+export  {getRandomArrayElement,pokemonToCategoryArray, checkWinningPicks, areSetsEqual, shuffleArray}

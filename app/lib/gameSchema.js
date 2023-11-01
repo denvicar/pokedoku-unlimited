@@ -74,13 +74,38 @@ const buildSchema = (pokemons) => {
     let completeSchema = generateColumns(pokemons)
     let rows = completeSchema[0]
     let columns = completeSchema[1]
-
-
-    // filtro per regione, non posso fare mitici e leggendari per ora
-    // devo filtrare le regioni per trovare quelle che hanno tutte le righe
-    // let availableRegions = getAvailableRegionsByRows([...rows])
-    // columns.add(getRandomArrayElement([...availableRegions]))
     return [[...rows],[...columns]]
+}
+
+const buildHardSchema = (pokemons) => {
+    let s = buildSchema(pokemons)
+    let rows = s[0]
+    let cols = s[1]
+
+    let newRow = new Set()
+
+    let availableTypes = categories.filter(cat => !rows.includes(cat) && !cols.includes(cat))
+
+    while (newRow.size < 3) {
+        newRow = new Set()
+        let availableCategories = new Set(availableTypes)
+        //console.log(availableCategories)
+        let pokemonCategories = mapPokemonsToCategoryArray(pokemons,new Set(rows),new Set(cols))
+        //console.log(pokemonCategories.length, " pokemons available")
+        for (let i = 0; i < SCHEMA_SIZE; i++) {
+            let thirdType = getRandomArrayElement([...availableCategories])
+            //console.log("Third type for col ",i," is ", thirdType)
+            if (thirdType && checkTyping(thirdType,rows, cols[i], pokemonCategories)) {
+                newRow.add(thirdType)
+                availableCategories.delete(thirdType)
+            }
+        }
+    }
+    return [rows,cols,[...newRow]]
+}
+
+const checkTyping = (type, rows, colType, pCats) => {
+    return rows.every(rowType => pCats.filter(pcat => pcat.includes(type) && pcat.includes(colType) && pcat.includes(rowType)).length>0)
 }
 
 const buildSchemaCode = (schema) => {
@@ -131,10 +156,11 @@ const getAvailableCategoriesByRows = (rows, pokemonCategoryArray, availableCateg
 }
 
 
-const mapPokemonsToCategoryArray = (pokemons,rows) => {
+const mapPokemonsToCategoryArray = (pokemons,rows,cols=new Set()) => {
     return Array.from(pokemons.values())
         .map(p => pokemonToCategoryArray(p))
-        .filter(pArray => pArray.some(category => rows.has(category)))
+        .filter(pArray => pArray.some(category => rows.has(category)) && (cols.size===0 || pArray.some(category => cols.has(category))))
 }
 
-export {buildSchema, buildSchemaCode, decodeSchemaCode}
+
+export {buildSchema, buildSchemaCode, decodeSchemaCode, buildHardSchema}

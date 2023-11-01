@@ -8,13 +8,13 @@ export default function PokemonList({pokemons,types,imageToShow}) {
         return pokemons
             .filter(p => {
                 let pokemonCategoryArray = pokemonToCategoryArray(p)
-                return pokemonCategoryArray.includes(types[0]) && pokemonCategoryArray.includes(types[1]);
+                return pokemonCategoryArray.includes(types[0]) && pokemonCategoryArray.includes(types[1]) && pokemonCategoryArray.includes(types[2]);
             })
     }
 
     let displayedList = filterPokemons()
     return <div className={"h-fit max-h-[60vh] overflow-y-scroll"}>
-        {types.length===2 &&
+        {types.length===3 &&
             displayedList
                 .map(p =>
                     <div key={p.pokedex_number} className={"flex flex-row flex-nowrap justify-around"}>
