@@ -47,4 +47,4 @@ const special = [
 
 const SCHEMA_SIZE = 3
 
-export {types,regions,special, SCHEMA_SIZE, decodingArray}
+export  {types,regions,special, SCHEMA_SIZE, decodingArray}
