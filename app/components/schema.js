@@ -167,10 +167,10 @@ export default function Schema({pokemons}) {
     function handleModeChange() {
         if (isHard) {
             setMode('Normal')
-            getNewSchema(buildHardSchema)
+            getNewSchema(buildSchema)
         } else {
             setMode('Hard')
-            getNewSchema(buildSchema)
+            getNewSchema(buildHardSchema)
         }
     }
 
