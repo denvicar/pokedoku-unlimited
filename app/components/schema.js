@@ -147,7 +147,8 @@ export default function Schema({pokemons}) {
 
     function handleInsertCode(inputText) {
         setInputCode(inputText)
-        if (inputText.trim().length === 6 && new Set([...inputText]).size === inputText.length) {
+        const expectedLength = isHard ? 9 : 6
+        if (inputText.trim().length === expectedLength && new Set([...inputText]).size === inputText.length) {
             handleRegenerate()
             setInsertingCode(false)
             setInputCode("")
