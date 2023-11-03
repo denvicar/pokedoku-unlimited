@@ -199,7 +199,7 @@ export default function Schema({pokemons}) {
                 <Button handleClick={() => handleSurrender()} label={surrender ? 'Restart' : 'Surrender'}/>
                 {insertingCode ? <input
                         className={"bg-slate-800 px-2 rounded-full border border-slate-50 w-5/6 hover:bg-slate-600 focus:bg-slate-600 focus:outline-none"}
-                        maxLength={6} minLength={6} type={"text"} value={inputCode}
+                        maxLength={9} minLength={6} type={"text"} value={inputCode}
                         onChange={(e) => handleInsertCode(e.target.value)}/> :
                     <Button handleClick={() => setInsertingCode(true)} label={"Insert code"}/>}
             </div>
