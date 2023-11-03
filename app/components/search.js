@@ -13,7 +13,7 @@ export default function Search({pokemons, inputRef, handlePick, imageToShow}) {
 
 
     return <div className={"h-fit"}>
-        <input ref={inputRef} className={"relative ml-[8%] bg-slate-200 placeholder-gray-800/75 dark:placeholder-gray-50/75 px-2 dark:bg-slate-800 rounded-full border border-slate-800 dark:border-slate-50 w-[84%] h-10 hover:bg-slate-400 focus:bg-slate-400 dark:hover:bg-slate-600 dark:focus:bg-slate-600 focus:outline-none"} value={name} onChange={(e) => setName(e.target.value)} type="text"
+        <input ref={inputRef} autoCorrect={"off"} autoComplete={"off"} className={"relative ml-[8%] bg-slate-200 placeholder-gray-800/75 dark:placeholder-gray-50/75 px-2 dark:bg-slate-800 rounded-full border border-slate-800 dark:border-slate-50 w-[84%] h-10 hover:bg-slate-400 focus:bg-slate-400 dark:hover:bg-slate-600 dark:focus:bg-slate-600 focus:outline-none"} value={name} onChange={(e) => setName(e.target.value)} type="text"
                placeholder="Start writing the pokemon name..."/>
 
 
