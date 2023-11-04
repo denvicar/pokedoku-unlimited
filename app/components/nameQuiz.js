@@ -6,11 +6,10 @@ import Fuse from "fuse.js";
 import Button from "@/app/components/button";
 
 export default function NameQuiz({pokemons}) {
-    pokemons = pokemons.filter(p => !p.name.includes("minior"))
     const [score, setScore] = useState(0)
     const [error, setError] = useState(null)
     const [disabled, setDisabled] = useState([null,null,null,null].map(r=>false))
-    const [current, setCurrent] = useState(getRandomArrayElement(pokemons))
+    const [current, setCurrent] = useState(getRandomArrayElement(pokemons.filter(p=>!p.name.includes("minior") && !p.name.includes("pumpkaboo"))))
     const [image, setImage] = useState()
     const [nameMode, setNameMode] = useState(true)
 
@@ -54,7 +53,7 @@ export default function NameQuiz({pokemons}) {
             setScore(score + 1)
             setError(null)
             setDisabled(disabled.map(x => false))
-            setCurrent(getRandomArrayElement(pokemons))
+            setCurrent(getRandomArrayElement(pokemons.filter(p=>!p.name.includes("minior") && !p.name.includes("pumpkaboo"))))
         } else {
             setScore(0)
             setError('Wrong guess! Try again')
@@ -79,7 +78,7 @@ export default function NameQuiz({pokemons}) {
     return <div className={"flex flex-col flex-nowrap gap-2 px-2"}>
         {nameMode && <h1 className={"font-bold text-2xl mt-2"}>Guess the name</h1>}
         {!nameMode && <h1 className={"font-bold text-2xl mt-2"}>Guess the image</h1>}
-        <div className={"flex flex-row gap-5 h-8"}><h2 className={"font-semibold text-xl"}>Score: {score}</h2> <Button handleClick={() => handleSwitchClick()} label={image === 'sprite_url' ? 'Switch to art' : 'Switch to sprite'} />
+        <div className={"flex flex-row gap-2 h-8"}><h2 className={"font-semibold text-xl"}>Score: {score}</h2> <Button handleClick={() => handleSwitchClick()} label={image === 'sprite_url' ? 'Switch to art' : 'Switch to sprite'} />
         <Button handleClick={() => handleModeChange()} label={"Change mode"} /> </div>
         {nameMode ? <img className={"w-3/6"} src={current[image]} alt={current.pokedex_number}/> : <h3 className={"font-bold text-2xl mt-2 text-center"}>{current.display_name}</h3> }
         {/*<h3 className={"text-lg"}>{current.display_name}</h3>*/}
