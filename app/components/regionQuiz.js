@@ -7,7 +7,7 @@ import Button from "@/app/components/button";
 export default function RegionQuiz({pokemons}) {
     const [score, setScore] = useState(0)
     const [error, setError] = useState(null)
-    const [disabled, setDisabled] = useState([...regions,"Hisui"].map(r=>false))
+    const [disabled, setDisabled] = useState(regions.map(r=>false))
     const [current, setCurrent] = useState(getRandomArrayElement(pokemons))
     const [image, setImage] = useState()
 
@@ -49,7 +49,7 @@ export default function RegionQuiz({pokemons}) {
         <h3 className={"text-lg"}>{current.display_name}</h3>
         {error !== null && <span style={{color:"red"}}>{error}</span>}
         <div className={"flex flex-row flex-wrap place-content-stretch"}>
-            {[...regions,"Hisui"]
+            {regions
                 .map((r,i) =>
                     <div className={"basis-1/3 px-3"} key={r}>
                         <button className={"w-full mb-2 disabled:bg-gray-500 bg-blue-200 dark:bg-blue-800 hover:bg-blue-500 rounded-full py-1 px-2 font-semibold"}
