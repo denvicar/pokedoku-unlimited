@@ -1,4 +1,4 @@
-const decodingArray = "abcdefghijklmnopqrstuvwxyz0123456789@#"
+const decodingArray = "abcdefghijklmnopqrstuvwxyz0123456789@#&"
 
 const types = [
     'fire',
@@ -29,8 +29,8 @@ const regions = [
     'Kalos',
     'Alola',
     'Galar',
-    'Paldea',
     'Hisui',
+    'Paldea',
 ]
 const special = [
     'Legendary',
@@ -42,7 +42,8 @@ const special = [
     'BaseForm',
     'Dual Type',
     'Paradox',
-    'Mythical'
+    'Mythical',
+    'Gmax'
 ]
 
 const SCHEMA_SIZE = 3
