@@ -63,7 +63,7 @@ export default function TypeQuiz({pokemons}) {
         <div className={"flex flex-row gap-5 h-8"}><h2 className={"font-semibold text-xl"}>Score: {score}</h2> <Button handleClick={() => handleSwitchClick()} label={image === 'sprite_url' ? 'Switch to art' : 'Switch to sprite'} /></div>
         <img className={"w-3/6"} src={current[image]} alt={current.name}/>
         <h3 className={"text-lg"}>{current.display_name}</h3>
-        {guess !== '' && <span style={{color:guessColor}}>{guess}</span>}
+        <span suppressHydrationWarning className={"h-8"} style={{color:guessColor}}>{guess}</span>
         <div className={"flex flex-row flex-wrap place-content-stretch"}>
             {[...types,'none']
                 .map((r,i) =>
