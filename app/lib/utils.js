@@ -44,4 +44,8 @@
     }
 }
 
-export  {getRandomArrayElement,pokemonToCategoryArray, checkWinningPicks, areSetsEqual, shuffleArray}
+function filterPokemons(pokemons) {
+    return pokemons.filter(p=>!p.name.includes("minior") && !p.name.includes("pumpkaboo") && !p.name.includes("ogerpon"))
+}
+
+export  {getRandomArrayElement,pokemonToCategoryArray, checkWinningPicks, areSetsEqual, shuffleArray, filterPokemons}
