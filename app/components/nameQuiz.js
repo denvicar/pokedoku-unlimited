@@ -1,7 +1,7 @@
 'use client'
 import {useEffect, useMemo, useState} from "react";
 import {regions} from "@/app/lib/constants";
-import {getRandomArrayElement, shuffleArray} from "@/app/lib/utils";
+import {filterPokemons, getRandomArrayElement, shuffleArray} from "@/app/lib/utils";
 import Fuse from "fuse.js";
 import Button from "@/app/components/button";
 
@@ -9,9 +9,10 @@ export default function NameQuiz({pokemons}) {
     const [score, setScore] = useState(0)
     const [error, setError] = useState(null)
     const [disabled, setDisabled] = useState([null,null,null,null].map(r=>false))
-    const [current, setCurrent] = useState(getRandomArrayElement(pokemons.filter(p=>!p.name.includes("minior") && !p.name.includes("pumpkaboo"))))
+    const [current, setCurrent] = useState(getRandomArrayElement(filterPokemons(pokemons)))
     const [image, setImage] = useState()
     const [nameMode, setNameMode] = useState(true)
+
 
     useEffect(() => {
         let ignore = false;
@@ -53,7 +54,7 @@ export default function NameQuiz({pokemons}) {
             setScore(score + 1)
             setError(null)
             setDisabled(disabled.map(x => false))
-            setCurrent(getRandomArrayElement(pokemons.filter(p=>!p.name.includes("minior") && !p.name.includes("pumpkaboo"))))
+            setCurrent(getRandomArrayElement(filterPokemons(pokemons)))
         } else {
             setScore(0)
             setError('Wrong guess! Try again')

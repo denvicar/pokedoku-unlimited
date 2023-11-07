@@ -15,7 +15,10 @@
     if (pokemon.types.length===1) ret.push("Monotype")
     else ret.push("Dual Type")
     if (pokemon.is_paradox) ret.push("Paradox")
-    if (pokemon.name.includes("gmax")) ret.push("Gmax")
+    if (pokemon.is_gmax) ret.push("Gmax")
+     if (pokemon.first_in_line) ret.push("First in line")
+     if (pokemon.last_in_line) ret.push("Last in line")
+     if (pokemon.has_gender_differences) ret.push("Gender difference")
     return ret
 }
 
@@ -44,4 +47,8 @@
     }
 }
 
-export  {getRandomArrayElement,pokemonToCategoryArray, checkWinningPicks, areSetsEqual, shuffleArray}
+function filterPokemons(pokemons) {
+    return pokemons.filter(p=>!p.name.includes("minior") && !p.name.includes("pumpkaboo") && !p.name.includes("ogerpon"))
+}
+
+export  {getRandomArrayElement,pokemonToCategoryArray, checkWinningPicks, areSetsEqual, shuffleArray, filterPokemons}

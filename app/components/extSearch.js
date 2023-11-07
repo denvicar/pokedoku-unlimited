@@ -8,7 +8,13 @@ export default function ExtendedSearch({pokemons}) {
     function filterPokemons() {
         return pokemons
             .filter(p => {
-                let pcat = pokemonToCategoryArray(p).map(cat => cat.toLowerCase()).map(cat => cat==='dual type' ? 'dualtype' : cat)
+                let pcat = pokemonToCategoryArray(p).map(cat => cat.toLowerCase()).map(cat => {
+                    if (cat === 'dual type') return 'dualtype'
+                    if (cat === 'first in line') return 'first'
+                    if (cat === 'last in line') return 'last'
+                    if (cat === 'gender difference') return 'gender'
+                    return cat
+                })
                 return params.split(" ").every(param => pcat.includes(param.toLowerCase()))
             })
     }
