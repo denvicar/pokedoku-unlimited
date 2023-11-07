@@ -15,7 +15,7 @@
     if (pokemon.types.length===1) ret.push("Monotype")
     else ret.push("Dual Type")
     if (pokemon.is_paradox) ret.push("Paradox")
-    if (pokemon.name.includes("gmax")) ret.push("Gmax")
+    if (pokemon.name.includes("gmax") || pokemon.name.includes("eternamax")) ret.push("Gmax")
     return ret
 }
 
