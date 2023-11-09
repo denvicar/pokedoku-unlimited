@@ -11,7 +11,7 @@
     if (pokemon.is_fossil) ret.push("Fossil")
     if (pokemon.is_baby) ret.push("Baby")
     if (pokemon.is_base_form) ret.push("BaseForm")
-    else ret.push("Evolved")
+    if (!pokemon.is_base_form && !pokemon.first_in_line) ret.push("Evolved")
     if (pokemon.types.length===1) ret.push("Monotype")
     else ret.push("Dual Type")
     if (pokemon.is_paradox) ret.push("Paradox")
