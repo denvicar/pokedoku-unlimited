@@ -1,4 +1,4 @@
-const decodingArray = "abcdefghijklmnopqrstuvwxyz0123456789@#&"
+const decodingArray = "abcdefghijklmnopqrstuvwxyz0123456789@#&!?+"
 
 const types = [
     'fire',

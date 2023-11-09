@@ -18,7 +18,7 @@
     if (pokemon.is_gmax) ret.push("Gmax")
      if (pokemon.first_in_line) ret.push("First in line")
      if (pokemon.last_in_line) ret.push("Last in line")
-     if (pokemon.has_gender_differences) ret.push("Gender differences")
+     if (pokemon.has_gender_differences) ret.push("Gender difference")
     return ret
 }
 
