@@ -211,14 +211,14 @@ export default function Schema({pokemons}) {
                     {schema[1].map(t => <div className={"w-1/4 flex-none text-center"} key={t}>{constTypes.includes(t) ?
                         // eslint-disable-next-line @next/next/no-img-element
                         <img className={"w-5/6 m-auto"} src={t + ".png"} alt={t}/> : <span
-                            className={"font-semibold uppercase font-poke text-[0.6rem] text-center align-middle break-words leading-[3rem] m-auto"}>{t}</span>}</div>)}
+                            className={"font-semibold uppercase font-poke text-[0.55rem] text-center align-middle m-auto"}>{t}</span>}</div>)}
                 </div>
                 {schema[0].map((type, i) => {
                     return <div key={type} className={"flex flex-row flex-nowrap justify-around"}>
                         <div className={"w-1/4 flex-none aspect-square text-center"}>{constTypes.includes(type) ?
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img className={"w-5/6 mx-auto mt-7"} src={type + ".png"} alt={type}/> : <span
-                                className={"font-semibold uppercase font-poke text-[0.6rem] text-center align-middle break-words leading-[5.5rem]"}>{type}</span>}</div>
+                            <img className={"w-5/6 mx-auto mt-7"} src={type + ".png"} alt={type}/> : <div
+                                className={"font-semibold uppercase font-poke text-[0.55rem] leading-normal text-center mt-[40%]"}>{type}</div>}</div>
                         <div className={"flex-none w-1/4 aspect-square"}>
                             {getCellContent(i, 0)}
                         </div>
@@ -235,7 +235,7 @@ export default function Schema({pokemons}) {
                     {schema[2].map(t => <div className={"w-1/4 flex-none text-center"} key={t}>{constTypes.includes(t) ?
                         // eslint-disable-next-line @next/next/no-img-element
                         <img className={"w-5/6 m-auto"} src={t + ".png"} alt={t}/> : <span
-                            className={"font-semibold uppercase font-poke text-[0.6rem] text-center align-middle break-words leading-[3rem] m-auto"}>{t}</span>}</div>)}
+                            className={"font-semibold uppercase font-poke text-[0.55rem] text-center align-middle m-auto"}>{t}</span>}</div>)}
                 </div>}
 
             </div>
