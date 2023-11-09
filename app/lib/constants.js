@@ -43,7 +43,10 @@ const special = [
     'Dual Type',
     'Paradox',
     'Mythical',
-    'Gmax'
+    'Gmax',
+    'First in line',
+    'Last in line',
+    'Gender difference'
 ]
 
 const SCHEMA_SIZE = 3
