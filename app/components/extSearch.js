@@ -13,6 +13,7 @@ export default function ExtendedSearch({pokemons}) {
                     if (cat === 'first in line') return 'first'
                     if (cat === 'last in line') return 'last'
                     if (cat === 'gender difference') return 'gender'
+                    if (cat === 'stone evolved') return 'stone'
                     return cat
                 })
                 return params.split(" ").every(param => pcat.includes(param.toLowerCase()))
