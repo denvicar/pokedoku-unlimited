@@ -19,6 +19,7 @@
      if (pokemon.first_in_line) ret.push("First in line")
      if (pokemon.last_in_line) ret.push("Last in line")
      if (pokemon.has_gender_differences) ret.push("Gender difference")
+     if (pokemon.evolved_with_stone) ret.push("Stone evolved")
     return ret
 }
 

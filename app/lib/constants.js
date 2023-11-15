@@ -1,4 +1,4 @@
-const decodingArray = "abcdefghijklmnopqrstuvwxyz0123456789@#&!?+"
+const decodingArray = "abcdefghijklmnopqrstuvwxyz0123456789@#&!?+-"
 
 const types = [
     'fire',
@@ -46,7 +46,8 @@ const special = [
     'Gmax',
     'First in line',
     'Last in line',
-    'Gender difference'
+    'Gender difference',
+    'Stone evolved'
 ]
 
 const SCHEMA_SIZE = 3
